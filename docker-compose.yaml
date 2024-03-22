@@ -1,6 +1,15 @@
 version: '3.8'
 
 services:
+  grafana:
+    image: grafana/grafana:latest
+    user: "0"
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+    volumes:
+      - ./grafana:/var/lib/grafana
   django:
     build: ./app
     command: python manage.py runserver 0.0.0.0:8000
@@ -12,6 +21,8 @@ services:
       - ./.env.dev
     depends_on:
       - db
+    networks:
+      - monitoring
   db:
     image: postgres:latest
     volumes:
@@ -20,6 +31,8 @@ services:
        - ./.env.dev
     ports:
       - 5432:5432
+    networks:
+      - monitoring
   nginx:
     image: nginx:latest
     volumes:
@@ -30,6 +43,23 @@ services:
       - 80:80
     depends_on:
       - django
+    networks:
+      - monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus:/etc/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - monitoring
+
+
 
 volumes:
   postgres_data:
+
+networks:
+  monitoring:
