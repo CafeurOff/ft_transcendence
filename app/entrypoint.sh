@@ -13,6 +13,7 @@ fi
 
 # python manage.py flush --no-input
 
+python manage.py startapp singlepage
 python manage.py makemigrations ft_transcendence
 python manage.py migrate
 
