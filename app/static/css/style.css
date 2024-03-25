@@ -1,3 +1,31 @@
 body {
     background-color: #1E1E1E;
 }
+
+div.rcorners1 {
+    border-radius: 25px;
+    background: #3D3939;
+    padding: 20px;
+    width: 371px;
+    height: 416px; 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center; 
+    align-items: flex-start;
+}
+
+div.rcorners1 h1 {
+    text-align: center;
+    color: #f8f8f8;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    max-width: 90%;
+    max-height: 90%; 
+    overflow: hidden;
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    font-size: 2vw; 
+}
