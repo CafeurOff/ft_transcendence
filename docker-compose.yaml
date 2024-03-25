@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+# Grafana for monitoring and visualization of data
   grafana:
     image: grafana/grafana:latest
     user: "0"
@@ -10,6 +11,7 @@ services:
       - prometheus
     volumes:
       - ./grafana:/var/lib/grafana
+# Django framework for backend development 
   django:
     build: ./app
     command: python manage.py runserver 0.0.0.0:8000
@@ -19,10 +21,13 @@ services:
       - 8000:8000
     env_file:
       - ./.env.dev
+    environment:
+      - LOGSTASH_HOST=logstash
     depends_on:
       - db
     networks:
       - monitoring
+# Postgres database for storing data
   db:
     image: postgres:latest
     volumes:
@@ -33,6 +38,7 @@ services:
       - 5432:5432
     networks:
       - monitoring
+# Nginx for serving static files
   nginx:
     image: nginx:latest
     volumes:
@@ -45,6 +51,7 @@ services:
       - django
     networks:
       - monitoring
+# Prometheus for monitoring and alerting
   prometheus:
     image: prom/prometheus:latest
     ports:
@@ -55,11 +62,52 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     networks:
       - monitoring
+# Node exporter for monitoring system metrics
+  elasticsearch:
+    image: bitnami/elasticsearch:latest
+    environment:
+      - ELASTICSEARCH_HEAP_SIZE=1024m
+    volumes:
+      - elasticsearch_data:/bitnami/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - monitoring
+  logstash:
+    image: bitnami/logstash:latest
+    environment:
+      - LOGSTASH_ELASTICSEARCH_URL=elasticsearch
+      - LOGSTASH_ELASTICSEARCH_PORT_NUMBER=9200
+    volumes:
+      - ./logstash/logstash.conf:/opt/bitnami/logstash/config/logstash.conf
+      - logstash_data:/bitnami
+    ports:
+      - 5000:5000
+    networks:
+      - monitoring
+    depends_on:
+      - elasticsearch
+  kibana:
+    image: bitnami/kibana:latest
+    environment:
+      - KIBANA_ELASTICSEARCH_URL=elasticsearch
+      - KIBANA_ELASTICSEARCH_PORT_NUMBER=9200
+    volumes:
+      - kibana_data:/bitnami/kibana
+    ports:
+      - 5601:5601
+    networks:
+      - monitoring
+    depends_on:
+      - elasticsearch
 
-
-
+# Volume for storing postgres data
 volumes:
   postgres_data:
+  elasticsearch_data:
+  logstash_data:
+  kibana_data:
 
+# Network for monitoring
 networks:
   monitoring:

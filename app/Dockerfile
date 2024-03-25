@@ -1,19 +1,23 @@
-# pull official base image
+# Description: Dockerfile for the app service.
+
+# Base image
 FROM python:3.11.4-slim-buster
 
-# set work directory
+# Working directory
 WORKDIR /usr/src/app
 
-# set environment variables
+# Environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install system dependencies
+# Install dependencie
 RUN apt-get update && apt-get install -y netcat
 
-# install dependencies
+# Update dependencies
 RUN pip install --upgrade pip
 RUN pip install prometheus_client
+RUN pip install django python-logstash
+
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
