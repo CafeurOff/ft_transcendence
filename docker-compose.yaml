@@ -23,10 +23,9 @@ services:
       - 8000:8000
     env_file:
       - ./.env.dev
-    environment:
-      - LOGSTASH_HOST=logstash
     depends_on:
       - db
+
     networks:
       - monitoring
 # Postgres database for storing data
@@ -69,6 +68,7 @@ services:
     image: bitnami/elasticsearch:latest
     environment:
       - ELASTICSEARCH_HEAP_SIZE=1024m
+      - discovery.type=single-node
     volumes:
       - elasticsearch_data:/bitnami/elasticsearch/data
     ports:
@@ -81,14 +81,14 @@ services:
       - LOGSTASH_ELASTICSEARCH_URL=elasticsearch
       - LOGSTASH_ELASTICSEARCH_PORT_NUMBER=9200
     volumes:
-      - ./logstash/logstash.conf:/opt/bitnami/logstash/config/logstash.conf
+      - ./logstash/logstash.conf:/opt/bitnami/logstash/pipeline/logstash.conf
       - logstash_data:/bitnami
     ports:
       - 5000:5000
-    networks:
-      - monitoring
     depends_on:
       - elasticsearch
+    networks:
+      - monitoring
   kibana:
     image: bitnami/kibana:latest
     environment:
@@ -98,10 +98,10 @@ services:
       - kibana_data:/bitnami/kibana
     ports:
       - 5601:5601
-    networks:
-      - monitoring
     depends_on:
       - elasticsearch
+    networks:
+      - monitoring
 
 # Volume for storing postgres data
 volumes:

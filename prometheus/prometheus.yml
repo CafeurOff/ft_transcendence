@@ -6,6 +6,6 @@ scrape_configs:
     static_configs:
       - targets: ['django:8000']
 
-  - job_name: 'postgresql'
+  - job_name : 'prometheus'
     static_configs:
-      - targets: ['django:9187']
+      - targets: ['prometheus:9090']

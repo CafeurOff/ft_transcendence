@@ -6,33 +6,9 @@
         <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
         <meta http-equiv = "X-UA-Compatible" content = "ie=edge">
         <link rel="stylesheet" href="{% static 'css/style.css' %}"></link>
+        <script src="{% static 'js/singlepage.js' %}"></script>
         <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
         <title>Transcendence</title>
-        <script>
-
-            //  This function communicates with django (backend)
-
-            function showSection(section) {
-                fetch(`/sections/${section}`)
-                .then(response => response.text())
-                .then(text => {
-                    console.log(text);
-                    document.querySelector('#content').innerHTML = text;
-                });
-
-            }
-
-
-            document.addEventListener("DOMContentLoaded", function() {
-                document.querySelectorAll('button').forEach(button => {
-                    button.onclick = function() {
-                        showSection(this.dataset.section)
-                    }
-                })
-            });
-
-
-        </script>
     </head>
     <body>
         <div class="container">
@@ -42,8 +18,6 @@
             </div>
         </div>
         <div id="content">
-
         </div>
-
     </body>
 </html>
