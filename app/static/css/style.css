@@ -13,8 +13,9 @@ div.rcorners1 {
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
-    justify-content: center; 
-    align-items: flex-start;
+    flex-direction: column; /* Pour que les éléments soient empilés verticalement */
+    justify-content: flex-start; /* Aligner les éléments en haut de la boîte */
+    align-items: center; /* Pour centrer horizontalement */
 }
 
 div.rcorners1 h1 {
@@ -23,9 +24,21 @@ div.rcorners1 h1 {
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
     max-width: 90%;
-    max-height: 90%; 
+    max-height: 90%;
     overflow: hidden;
-    white-space: nowrap; 
+    white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: 2vw; 
+    font-size: 2vw;
+    margin-top: -1px;
+}
+
+.placeholder-style::placeholder {
+    color: rgba(255, 255, 255, 0.8); /* Couleur du texte du placeholder avec une opacité de 0.8 */
+}
+
+.custom-checkbox {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    background-color: #262525; /* Couleur de fond personnalisée */
 }
