@@ -22,4 +22,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('', include('django_prometheus.urls')), # Is the localhost:8000/metrics endpoint
     path('admin/', admin.site.urls),
+    path('game/', views.game, name='game'),
 ]

@@ -8,6 +8,10 @@ from django.shortcuts import render, redirect
 def index(request):
     return render(request, 'index.html')
 
+def game(request):
+    return render(request, 'game.html')
+
 def handler404(request, exception):
     return render(request, '404.html', status=404)
+
 
