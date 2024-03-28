@@ -20,6 +20,7 @@ RUN pip install prometheus_client
 # Install logs dependencies and monitoring dependencies
 RUN pip install django python-logstash
 RUN pip install django-prometheus
+RUN pip install hvac
 
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
