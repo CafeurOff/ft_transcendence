@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ft_transcendence',
     'django_prometheus',
+    'singlepage'
 ]
 
 MIDDLEWARE = [
@@ -156,3 +156,4 @@ LOGGING = {
         },
     },
 }
+

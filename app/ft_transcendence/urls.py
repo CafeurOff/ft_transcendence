@@ -16,13 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
-
-handler404 = views.handler404
-
+from singlepage import views
+ 
 urlpatterns = [
     path('', views.index, name='index'),
     path('', include('django_prometheus.urls')), # Is the localhost:8000/metrics endpoint
-    path("sections/<int:num>", views.section, name='section'),
     path('admin/', admin.site.urls),
 ]
