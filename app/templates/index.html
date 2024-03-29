@@ -5,31 +5,29 @@
         <meta charset = "UTF-8">
         <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
         <meta http-equiv = "X-UA-Compatible" content = "ie=edge">
-        <link rel="stylesheet" href="{% static 'css/style.css' %}"></link>
+        <link rel="stylesheet" href="{% static 'css/index.css' %}"></link>
         <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
         <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}" >
+        <script src="{% static 'js/validateForm.js' %}"></script>
         <title>Transcendence</title>
     </head>
     <body>
         <div class="container">
             <div class="rcorners1">
                 <h1>PINGPONGHUB</h1>
-                <form action="/login/" method="post" style="resize: none;">
+                <form name="loginForm" method="post" onsubmit="return validateForm()" style="resize: none;">
                     {% csrf_token %}
                     {{ form }}
-                </form>
-                
-                <div style="margin-top: 25px;"></div>
-                
-                <form action="/login/" method="post" style="resize: none;">
-                    {% csrf_token %}
+                    <div style="margin-top: 25px;"></div>
                     {{ password_form }}
-
                     <div style="margin-top: 10px;"></div>
-                   <!--  {{ remember_form }}
-                    <label for="remember" style="color: white;">Se souvenir de moi</label> -->
+                    <input type="submit" value="Connexion" class="button">
                 </form>
+                <div style="margin-top: 10px;"></div>
+                <h2><span>Pas de compte ? Inscrivez vous</span> <a href="/register/" class="button">ici</a></h2>
+                <p>{{ message }}</p>
             </div>
-        </div>   
+        </div>
     </body>
 </html>
+
