@@ -11,9 +11,23 @@
         <title>Transcendence - Register</title>
     </head>
     <body>
-        <div class="container">
-            <div class="rcorners1">
-                <h1>Création de compte</h1>
+        <div class="container" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+            <div class="rcorners1" style="margin: 10px;">
+                <h1 style="text-align: center;">Création de compte</h1>
+                <form name="registerForm" id="registerForm" method="post" onsubmit="return validateForm()" style="resize: none;">
+                    {% csrf_token %}
+                    <div style="margin-bottom: 25px;">
+                        {{ form.username }}
+                    </div>
+                    <div style="margin-bottom: 25px;">
+                        {{ form.password1 }}
+                    </div>
+                    <div style="margin-bottom: 25px;">
+                        {{ form.password2 }}
+                    </div>
+                    <input type="submit" value="Créer" class="button" style="margin-top: 10px;">
+                </form>
+                <p id="errorMessage" style="display: none; color: red; text-align: center;"></p>
             </div>
         </div>
     </body>
