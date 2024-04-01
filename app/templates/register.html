@@ -26,8 +26,11 @@
                         {{ form.password2 }}
                     </div>
                     <input type="submit" value="Créer" class="button" style="margin-top: 10px;">
+                    {{form.non_field_errors}}
+                    {% for field in form %}
+                       <h6>{{field.errors}}</h6>
+                    {% endfor %}
                 </form>
-                <p id="errorMessage" style="display: none; color: red; text-align: center;"></p>
             </div>
         </div>
     </body>

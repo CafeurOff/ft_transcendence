@@ -31,11 +31,12 @@ def index(request):
 
 def register(request):
     form = SignupForm()
+    message = ''
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if not form.is_valid():
-            errors = form.errors.values()
-            return render(request, 'register.html', {'form': form, 'errors': errors})
+            message = 'Votre formulaire contient des erreurs'
+            return render(request, 'register.html', {'form': form, 'message': message})
         else:
             user = form.save()
             return redirect('index')
