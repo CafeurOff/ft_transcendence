@@ -1,5 +1,5 @@
 body {
-    background-color: #1E1E1E;
+    background-color: #1E1E1E !important;
 }
 
 div.rcorners1 {
@@ -37,7 +37,7 @@ div.rcorners1 h2 {
     font-family: 'Montserrat', sans-serif;
     font-weight: 200;
     font-size: 0.9vw;
-    margin-top: 50px;
+    margin-top: 5px;
     display: inline; 
     overflow: hidden;
 }
@@ -78,11 +78,4 @@ div.rcorners1 input[type=submit]:hover {
 
 .placeholder-style::placeholder {
     color: rgba(255, 255, 255, 0.8);
-}
-
-.custom-checkbox {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-    background-color: #262525; 
 }

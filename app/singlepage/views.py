@@ -14,12 +14,16 @@ def index(request):
     if request.method == 'POST':
         form = UsernamesForm(request.POST)
         password_form = PasswordForm(request.POST)
-        if form.is_valid() and password_form.is_valid():
+        remember_form = RememberForm(request.POST)
+        if form.is_valid() and password_form.is_valid() and remember_form.is_valid():
             user = form.cleaned_data['usernames']
             password = password_form.cleaned_data['password'] 
+            remember  = remember_form.cleaned_data['remember']
             user = authenticate(username=user, password=password)
             if user:
                 login(request, user)
+                if not remember:
+                    request.session.set_expiry(0)
                 return redirect('/welcome/')
             else:
                 message = 'Nom d’utilisateur ou mot de passe incorrect'

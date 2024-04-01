@@ -30,8 +30,12 @@ class PasswordForm(forms.Form):
 class RememberForm(forms.Form):
     remember = forms.BooleanField(
         label='',
-        widget=forms.CheckboxInput(attrs={'style': 'width: 20px; height: 20px; margin-right: 10px; background-color: #262525;'}),  # Définir directement le style
+        widget=forms.CheckboxInput(attrs={
+            'style': 'width: 5%; height: 5%;',
+            'class': 'custom-checkbox',
+        }),
         required=False
+
     )
 
 class SignupForm(UserCreationForm):
@@ -51,7 +55,10 @@ class SignupForm(UserCreationForm):
     )
     password1 = forms.CharField(
         label='',
-        widget=forms.PasswordInput(attrs={'style': 'width: 300px; height: 40px; font-family: "Montserrat"; font-size: 16px; background-color: rgba(198, 182, 182, 0.1); padding: 10px; border: none; border-radius: 7px; color: white;', 'class': 'form-control placeholder-style', 'placeholder': 'Mot de passe', 'color': 'white'}), # Ajout de la couleur du texte
+        widget=forms.PasswordInput(attrs={'style': 'width: 300px; height: 40px; font-family: "Montserrat"; font-size: 16px; background-color: rgba(198, 182, 182, 0.1); padding: 10px; border: none; border-radius: 7px; color: white;',
+                                            'class': 'form-control placeholder-style',
+                                            'placeholder': 'Mot de passe',
+                                            'color': 'white'}),
         error_messages={'required': 'Veuillez entrer un mot de passe'},
         # validators=[
         #     MinLengthValidator(8, message='Votre mot de passe doit contenir au moins 8 caractères'),
