@@ -61,17 +61,18 @@ div.container h4 {
 div.information-container {
     border-radius: 7px;
     background: #242222;
-    width: 95%;	
-    height: 11%; 
+    width: 95%;
+    height: auto; /* Changement de la hauteur en 'auto' pour s'adapter au contenu */
     position: absolute;
     top: 10%;
     left: 3.5%;
     display: flex;
+    flex-direction: column; /* Pour afficher les éléments en colonne */
 }
 
 div.title {
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.7vw;
+    font-size: 1.5vw;
     font-weight: lighter;
     color: #f8f8f8;
     margin: 10px 0px 0px 10px;
@@ -79,8 +80,8 @@ div.title {
 
 div.information {
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.8vw;
+    font-size: 1vw; 
     font-weight: lighter;
     color: #6A6A6A;
-    margin: 35px 0px 0px -95px;
+    margin: 20px 10px; 
 }
