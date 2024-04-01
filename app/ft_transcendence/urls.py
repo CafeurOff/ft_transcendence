@@ -26,4 +26,6 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('welcome/', views.welcome, name='welcome'),
     path('logout/', views.logout_view, name='logout'),
+    path('gamepage/', views.gamepage, name='gamepage'),
+    path('404/', views.handler404, name='404')
 ]

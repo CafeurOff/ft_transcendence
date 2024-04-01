@@ -53,8 +53,15 @@ def welcome(request):
         message = 'Vous devez être connecté pour accéder à cette page'
         return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
 
+def gamepage(request):
+    if request.user.is_authenticated:
+        return render(request, 'gamepage.html', {'user': request.user})
+    else:
+        message = 'Vous devez être connecté pour accéder à cette page'
+        return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
+
 def game(request):
     return render(request, 'game.html')
 
-def handler404(request, exception):
+def handler404(request):
     return render(request, '404.html', status=404)
