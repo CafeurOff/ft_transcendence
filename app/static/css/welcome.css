@@ -1,0 +1,86 @@
+body {
+    background: #1E1E1E !important;
+}
+
+.navbar {
+    height: 60px; /* Ajoutez une hauteur fixe à votre navbar */
+}
+
+.navbar-brand {
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #f8f8f8;
+    font-weight: bolder;
+}
+
+.nav-item.active .navbar-brand {
+    font-weight: bolder;
+}
+
+.nav-item .navbar-brand {
+    font-weight: normal;
+}
+
+.profile-picture {
+    width: 30px;
+    height: 30px; 
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+div.dropdown-menu {
+    background-color: #121212;
+    width: 274px;
+    height: 102px;
+    text-align: center;
+    line-height: 40px;
+}
+
+.dropdown-item {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bolder;
+    color: #fff;
+}
+
+
+div.container h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8vw;
+    font-weight: bolder;
+    color: #f8f8f8;
+    margin: -5px 100px 0px -300px;
+}
+
+div.information-container {
+    border-radius: 7px;
+    background: #242222;
+    width: 95%;	
+    height: 11%; 
+    position: absolute;
+    top: 10%;
+    left: 3.5%;
+    display: flex;
+}
+
+div.title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7vw;
+    font-weight: lighter;
+    color: #f8f8f8;
+    margin: 10px 0px 0px 10px;
+}
+
+div.information {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8vw;
+    font-weight: lighter;
+    color: #6A6A6A;
+    margin: 35px 0px 0px -95px;
+}

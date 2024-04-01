@@ -24,4 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('game/', views.game, name='game'),
     path('register/', views.register, name='register'),
+    path('welcome/', views.welcome, name='welcome'),
+    path('logout/', views.logout_view, name='logout'),
 ]
