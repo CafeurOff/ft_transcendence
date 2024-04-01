@@ -3,7 +3,7 @@ body {
 }
 
 .navbar {
-    height: 60px; /* Ajoutez une hauteur fixe à votre navbar */
+    height: 60px;
 }
 
 .navbar-brand {
@@ -49,7 +49,6 @@ div.dropdown-menu {
     color: #fff;
 }
 
-
 div.container h4 {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.8vw;
@@ -62,17 +61,17 @@ div.information-container {
     border-radius: 7px;
     background: #242222;
     width: 95%;
-    height: auto; /* Changement de la hauteur en 'auto' pour s'adapter au contenu */
+    height: auto;
     position: absolute;
     top: 10%;
     left: 3.5%;
     display: flex;
-    flex-direction: column; /* Pour afficher les éléments en colonne */
+    flex-direction: column;
 }
 
 div.title {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.5vw;
+    font-size: 1.2vw;
     font-weight: lighter;
     color: #f8f8f8;
     margin: 10px 0px 0px 10px;
@@ -80,8 +79,8 @@ div.title {
 
 div.information {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1vw; 
+    font-size: 0.8vw; 
     font-weight: lighter;
     color: #6A6A6A;
-    margin: 20px 10px; 
+    margin: 15px 20px; 
 }
