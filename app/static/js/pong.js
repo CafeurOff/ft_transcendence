@@ -30,7 +30,7 @@ function drawRect(x, y, width, height, color) {
 
 // Fonction pour dessiner une ligne au milieu
 function drawLine() {
-    ctx.strokeStyle = 'white';
+    ctx.strokeStyle = '#fff';
     ctx.beginPath();
     ctx.moveTo(canvas.width / 2, 0);
     ctx.lineTo(canvas.width / 2, canvas.height);
@@ -67,8 +67,8 @@ function draw() {
     drawCircle(ballX, ballY, ballRadius, 'white');
 
     // Ecrire les scores
-    drawText(player1Score, canvas.width / 4, 50, 'white');
-    drawText(player2Score, 3 * canvas.width / 4, 50, 'white');
+    document.getElementById("player1-score").textContent = player1Score;
+    document.getElementById("player2-score").textContent = player2Score;
 }
 
 function getRandomNumber(min, max) {
@@ -156,21 +156,11 @@ function gameLoop() {
     update();
     draw();
     handleKeyPress()
-    if (player1Score < 10 && player2Score < 10) {
+    if (player1Score < 5 && player2Score < 5) {
         requestAnimationFrame(gameLoop);
     } else {
         endGame();
     }
-}
-
-// Afficher qui a gagné
-function endGame() {
-    if (player1Score === 10) {
-        drawText("Player 1 wins !", 350, 250, 'red');
-    } else {
-        drawText("Player 2 wins !", 350, 250, 'red');
-    }
-    
 }
 
 document.addEventListener('keydown', handleKeydown);
