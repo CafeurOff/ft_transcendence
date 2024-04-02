@@ -11,11 +11,11 @@ body {
     text-align: center;
     width: 100%;
     color: #f8f8f8;
-    font-weight: bolder;
+    font-weight: bold; 
 }
 
 .nav-item.active .navbar-brand {
-    font-weight: bolder;
+    font-weight: bold;
 }
 
 .nav-item .navbar-brand {
@@ -37,14 +37,26 @@ body {
 
 div.dropdown-menu {
     background-color: #121212;
-    width: 274px;
-    height: 102px;
+    width: 350%;
+    height: 150%;
     text-align: center;
     line-height: 40px;
 }
 
+.dropdown-toggle.nav-link:hover {
+    background-color: #333;
+    cursor: pointer;
+
+}
+
 .dropdown-item {
     font-family: 'Montserrat', sans-serif;
-    font-weight: bolder;
+    font-weight: lighter;
     color: #fff;
+}
+
+.dropdown-divider {
+    background-color: #f8f8f8;
+    line-height: 10%;
+
 }
