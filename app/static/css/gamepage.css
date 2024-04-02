@@ -33,3 +33,51 @@ div.information {
     color: #6A6A6A;
     margin: 15px 20px; 
 }
+
+div.page-container h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5vw;
+    font-weight: bolder;
+    color: #f8f8f8;
+    margin: 14% 0px 0px 30%;
+}
+
+.custom-button {
+    position: relative;
+    margin: 5% 0px 0px 10%;
+    width: 35%;
+    height: 445px; 
+    background-color: #1C1B1B;
+    border: none;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.custom-button img {
+    margin: -50% 0px 0px 0px;
+    width: 213px;
+    height: 213px;
+}
+
+.custom-button span {
+    position: absolute;
+    top: 60%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5vw;
+    font-weight: bolder;
+    color: #f8f8f8;
+}
+
+.custom-button h6 {
+    position: absolute;
+    top: 70%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8vw;
+    font-weight: lighter;
+    color: #6A6A6A;
+}
+
