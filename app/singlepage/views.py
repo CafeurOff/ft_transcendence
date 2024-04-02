@@ -1,7 +1,5 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from prometheus_client import Counter, Histogram, Gauge
-from prometheus_client import generate_latest
 from django.shortcuts import render, redirect
 from .forms import UsernamesForm, PasswordForm, RememberForm, SignupForm
 from django.contrib.auth import login, authenticate, logout
