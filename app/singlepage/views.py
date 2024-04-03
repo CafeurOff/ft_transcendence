@@ -66,5 +66,8 @@ def gamepage(request):
 def game(request):
     return render(request, 'game.html')
 
+def gameia(request):
+    return render(request, 'ia.html')
+
 def handler404(request):
     return render(request, '404.html', status=404)

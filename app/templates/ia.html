@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %}
+{% include "./base/navbar.html" %}
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="{% static 'css/game.css' %}">
+        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+        <title>Game - Pong</title>
+    </head>
+
+<body>
+
+		<canvas id="pongIaCanvas" width="800" height="400"></canvas>
+
+        <script src="{% static 'js/ia.js' %}"> 
+            
+        </script>
+</body>
+
+</html>
