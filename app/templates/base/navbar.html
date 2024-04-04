@@ -35,7 +35,7 @@
                     <img src="{{ request.user.profile_image.url }}" alt="Photo de profil" class="profile-picture">
                 </a>
                 <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Paramètres de profil</a>
+                    <a class="dropdown-item" href="{% url 'settings' %}">Paramètres de profil</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{% url 'logout' %}">Se déconnecter</a>
                 </div>
