@@ -15,12 +15,12 @@ RUN apt-get update && apt-get install -y netcat
 
 # Update dependencies
 RUN pip install --upgrade pip
-RUN pip install prometheus_client
 
 # Install logs dependencies and monitoring dependencies
 RUN pip install django python-logstash
-RUN pip install django-prometheus
 RUN pip install hvac
+RUN pip install Pillow
+RUN pip install django_prometheus
 
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt

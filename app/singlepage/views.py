@@ -3,11 +3,13 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import UsernamesForm, PasswordForm, RememberForm, SignupForm
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.models import User
+from singlepage.models import User
 import time
 
 # View Index page : localhost:8000/
 def index(request):
+    if request.user.is_authenticated:
+        return redirect('/welcome/')
     message = ''
     if request.method == 'POST':
         form = UsernamesForm(request.POST)
@@ -32,16 +34,19 @@ def index(request):
     return render(request, 'index.html', {'form': form, 'password_form': password_form, 'remember_form': remember_form, 'message': message})
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('/welcome/')
     form = SignupForm()
     message = ''
     if request.method == 'POST':
         form = SignupForm(request.POST)
-        if not form.is_valid():
+        if form.is_valid(): 
+            user = form.save()
+            login(request, user)
+            return render(request, 'welcome.html')
+        else:
             message = 'Votre formulaire contient des erreurs'
             return render(request, 'register.html', {'form': form, 'message': message})
-        else:
-            user = form.save()
-            return redirect('index')
     return render(request, 'register.html', {'form': form})
 
 def logout_view(request):

@@ -17,7 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from singlepage import views
- 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('', include('django_prometheus.urls')), # Is the localhost:8000/metrics endpoint
@@ -30,3 +32,6 @@ urlpatterns = [
     path('gamepage/', views.gamepage, name='gamepage'),
     path('404/', views.handler404, name='404')
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

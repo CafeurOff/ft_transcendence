@@ -2,6 +2,8 @@ from django import forms
 from django.core.validators import RegexValidator
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import MinLengthValidator
+from singlepage.models import User
+
 
 class UsernamesForm(forms.Form):        
     usernames = forms.CharField(
@@ -69,3 +71,6 @@ class SignupForm(UserCreationForm):
         widget=forms.PasswordInput(attrs={'style': 'width: 300px; height: 40px; font-family: "Montserrat"; font-size: 16px; background-color: rgba(198, 182, 182, 0.1); padding: 10px; border: none; border-radius: 7px; color: white;', 'class': 'form-control placeholder-style', 'placeholder': 'Confirmer le mot de passe', 'color': 'white'}), # Ajout de la couleur du texte
     )
 
+    class Meta:
+        model = User
+        fields = ('username', 'password1', 'password2')
