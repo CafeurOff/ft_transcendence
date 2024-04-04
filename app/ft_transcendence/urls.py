@@ -30,6 +30,7 @@ urlpatterns = [
     path('welcome/', views.welcome, name='welcome'),
     path('logout/', views.logout_view, name='logout'),
     path('gamepage/', views.gamepage, name='gamepage'),
+    path('settings/', views.settings, name='settings'),
     path('404/', views.handler404, name='404')
 ]
 

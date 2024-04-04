@@ -28,18 +28,6 @@ class PasswordForm(forms.Form):
         error_messages={'required': 'Veuillez entrer un mot de passe'}
     )
 
-
-class RememberForm(forms.Form):
-    remember = forms.BooleanField(
-        label='',
-        widget=forms.CheckboxInput(attrs={
-            'style': 'width: 5%; height: 5%;',
-            'class': 'custom-checkbox',
-        }),
-        required=False
-
-    )
-
 class SignupForm(UserCreationForm):
     username = forms.CharField(
         label='',
@@ -74,3 +62,17 @@ class SignupForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'password1', 'password2')
+
+class UpdateUserNameForm(forms.ModelForm):
+    username = forms.CharField(
+        label='',
+        widget=forms.TextInput(attrs={'style': 'width: 95%; height: 30%; font-family: "Montserrat"; font-size: 16px; background-color: rgba(198, 182, 182, 0.1); padding: 10px; border: none; border-radius: 7px; color: white; margin: 1% 3%;'}),
+        required=False,
+        max_length=20,
+        min_length=1,
+        error_messages={'required': 'Veuillez entrer au moins un nom d’utilisateur'},
+    )
+
+    class Meta:
+        model = User
+        fields = ['username']

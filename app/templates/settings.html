@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{% load static %}
+{% include "./base/navbar.html" %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'css/settings.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}">
+    <title>Transcendence</title>
+</head>
+<body>
+    <div class="container">
+        <h4 class="title">PINGPONG</h4>
+        <form name="UpdateUserNameForm" id="UpdateUserNameForm" method="post" style="resize: none;">
+            {% csrf_token %}
+            <div class="username-container">
+                <div class="title">Nom d’utilisateur</div>
+                <div class="information">Modifiez mon nom d’utilistaeur</div>
+                {{ form.username }}
+                <input type="submit" value="Changer mon nom" class="button">
+            </div>
+            <div class="password-container">
+                <div class="title">Mot de passe</div>
+                <div class="information">Modifiez mon mot de passe</div>
+                {{ password_form }}
+                <input type="submit" value="Changer mon mot de passe" class="button">
+            </div>
+    </div>
+</body>
+</html>
