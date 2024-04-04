@@ -32,7 +32,7 @@
         <ul class="nav navbar-nav navbar-right" style="list-style-type: none;">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img src="https://source.unsplash.com/250x250?men" alt="Photo de profil" class="profile-picture">
+                    <img src="{{ request.user.profile_image.url }}" alt="Photo de profil" class="profile-picture">
                 </a>
                 <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="#">Paramètres de profil</a>
