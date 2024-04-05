@@ -19,6 +19,10 @@ from django.urls import path, include
 from singlepage import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import handler500
+
+handler500 = 'singlepage.views.handler500'
+handler404 = 'singlepage.views.handler404'
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -26,6 +30,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('game/', views.game, name='game'),
     path('game/ia', views.gameia, name='gameia'),
+    path('update_score/', views.update_score, name='update_score'),
+    path('update_loss/', views.update_loss, name='update_loss'),
     path('register/', views.register, name='register'),
     path('welcome/', views.welcome, name='welcome'),
     path('logout/', views.logout_view, name='logout'),

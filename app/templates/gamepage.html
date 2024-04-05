@@ -20,12 +20,12 @@
         </div>
         <div class="page-container">
             <h1>Choisissez votre mode de jeu</h1>
-            <button class="custom-button" onclick="window.location.href='{% url 'game' %}'">
+            <button class="custom-button" onclick="launchGame('{% url 'game' %}', '/game')">
                 <img src="{% static 'images/local.png' %}" alt="Local game">
                 <span>Local</span>
                 <h6>Jouez contre votre ami sur le même clavier !</h6>
             </button>
-            <button class="custom-button" onclick="window.location.href='{% url 'gameia' %}'">
+            <button class="custom-button" onclick="launchGame('{% url 'gameia' %}', '/game/ia')">
                 <img src="{% static 'images/ia.png' %}" alt="Online game">
                 <span>IA</span>
                 <h6>Défiez-vous en jouant contre une IA de différents niveaux !</h6>
@@ -33,4 +33,25 @@
         </div>        
     </div>
 </body>
+<script>
+    function launchGame(url, redirectUrl) {
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        }).then(response => {
+            if (response.ok) {
+                console.log('Match launched successfully!');
+                window.location.href = redirectUrl;
+            } else {
+                console.error('Failed to launch match!');
+            }
+        }).catch(error => {
+            console.error('Error launching match:', error);
+        });
+    }
+</script>
 </html>

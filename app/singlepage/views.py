@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import UsernamesForm, PasswordForm, SignupForm, UpdateUserNameForm, UpdatePictureForm  
@@ -51,26 +52,26 @@ def register(request):
 
 @login_required
 def settings(request):
-    form = UpdateUserNameForm(instance=request.user)
     picture_form = UpdatePictureForm(instance=request.user)
+    form = UpdateUserNameForm(instance=request.user)
     if request.method == 'POST':
         picture_form = UpdatePictureForm(request.POST, request.FILES, instance=request.user)
         form = UpdateUserNameForm(request.POST, instance=request.user)
         if form.is_valid() and picture_form.is_valid():
             user = form.save()
             picture_form.save()
-            messages.success(request, 'Votre compte a été mis à jour')
         else:
-            messages.error(request, 'Veuillez corriger les erreurs')
             picture_form = UpdatePictureForm(instance=request.user)
             form = UpdateUserNameForm(instance=request.user)
     return render(request, 'settings.html', {'form': form, 'picture_form': picture_form})
 
+@login_required
 def logout_view(request):
     if request.user.is_authenticated:
         logout(request)
     return redirect('/')
 
+@login_required
 def welcome(request):
     if request.user.is_authenticated:
         return render(request, 'welcome.html', {'user': request.user})
@@ -78,18 +79,54 @@ def welcome(request):
         message = 'Vous devez être connecté pour accéder à cette page'
         return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
 
+@login_required
 def gamepage(request):
     if request.user.is_authenticated:
         return render(request, 'gamepage.html', {'user': request.user})
     else:
         message = 'Vous devez être connecté pour accéder à cette page'
         return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
-
+ 
+@login_required
 def game(request):
+    if request.method == 'POST':
+        request.user.total_matches += 1
+        request.user.save()
+        return JsonResponse({'success': True})
     return render(request, 'game.html')
 
+@login_required
 def gameia(request):
+    if request.method == 'POST':
+        request.user.total_matches += 1
+        request.user.save()
+        return JsonResponse({'success': True})
     return render(request, 'ia.html')
 
-def handler404(request):
+@login_required
+def update_score(request):
+    if request.method == 'POST':
+        # Augmenter le score du joueur 1
+        user = request.user
+        user.win += 1
+        user.save()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+@login_required
+def update_loss(request):
+    if request.method == 'POST':
+        # Augmenter le score du joueur 1
+        user = request.user
+        user.lose += 1
+        user.save()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+
+
+def handler404(request, exception):
     return render(request, 'base/404.html', status=404)
+    
+def handler500(request):
+    return render(request, 'base/500.html', status=500)
