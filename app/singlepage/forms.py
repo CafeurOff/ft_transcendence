@@ -3,6 +3,9 @@ from django.core.validators import RegexValidator
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import MinLengthValidator
 from singlepage.models import User
+from django.forms import ImageField, FileInput
+from django.forms.widgets import ClearableFileInput
+
 
 
 class UsernamesForm(forms.Form):        
@@ -78,12 +81,8 @@ class UpdateUserNameForm(forms.ModelForm):
         fields = ['username']
 
 class UpdatePictureForm(forms.ModelForm):
-    picture = forms.ImageField(
-        label='',
-        widget=forms.FileInput(attrs={'style': 'width: 95%; height: 30%; font-family: "Montserrat"; font-size: 16px; background-color: rgba(198, 182, 182, 0.1); padding: 10px; border: none; border-radius: 7px; color: white; margin: 1% 3%;'}),
-        required=False,
-    )
-
+    profile_image = forms.FileField(widget=forms.FileInput(
+        attrs={'class': 'form-control-file', 'id': 'profile-image-input'}))
     class Meta:
         model = User
         fields = ['profile_image']

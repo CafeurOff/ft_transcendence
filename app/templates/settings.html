@@ -32,10 +32,26 @@
             <div class="picture-container">
                 <div class="title">Photo de profil</div>
                 <div class="information">Modifiez ma photo de profil</div>
-                <img src="{{ request.user.profile_image.url }}" alt="profile picture" class="profile-picture">
-                {{ picture_form }}
+                <img id="profile-image-preview" src="{% if request.user.profile_image %}{{ request.user.profile_image.url }}{% else %}/path/to/default/profile/image{% endif %}" alt="profile picture" class="profile-picture">
+                <div class="custom-file mb-3">
+                    {{ picture_form.profile_image }}
+                    <label class="custom-file-label" for="profile-image-input">Choisir un fichier</label>
+                </div>
                 <input type="submit" value="Changer ma photo de profil" class="button">
             </div>
-    </div>
+        </form>
+    </div>    
 </body>
+<script>
+    document.getElementById('profile-image-input').addEventListener('change', function(event) {
+        var input = event.target;
+        var reader = new FileReader();
+        reader.onload = function() {
+            var dataURL = reader.result;
+            var output = document.getElementById('profile-image-preview');
+            output.src = dataURL;
+        };
+        reader.readAsDataURL(input.files[0]);
+    });
+</script>
 </html>

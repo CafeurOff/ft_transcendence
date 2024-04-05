@@ -86,3 +86,44 @@ input[type=submit]:hover {
     background-color: rgba(28, 61, 2, 0.596);
     cursor: pointer;
 }
+
+.custom-file input[type=file] {
+    visibility: hidden;
+    width: 100%;
+    cursor: pointer;
+}
+
+.custom-file {
+    width: 95%;
+    height: 30%;
+    margin-bottom: 20px; 
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7vw;
+    font-weight: lighter;
+}
+
+.custom-file-label {
+    width: 100%;
+    height: 70%;
+    padding: 10px;
+    border: none;
+    margin: 1% 3%;
+    color: #ffffff;
+    background-color: rgba(198, 182, 182, 0.1);
+    border-radius: 7px;
+}
+
+.custom-file-input {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: calc(2.25rem + 2px);
+    margin: 0;
+    opacity: 0;
+}
+
+.custom-file-input:focus ~ .custom-file-label {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 .2rem rgba(0, 123, 255, .25);
+}
