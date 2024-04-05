@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import UsernamesForm, PasswordForm, SignupForm, UpdateUserNameForm, UpdatePictureForm  
+from .forms import UsernamesForm, PasswordForm, SignupForm, UpdateUserNameForm, UpdatePictureForm, UpdatePasswordForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
@@ -54,16 +54,23 @@ def register(request):
 def settings(request):
     picture_form = UpdatePictureForm(instance=request.user)
     form = UpdateUserNameForm(instance=request.user)
+    password_form = UpdatePasswordForm(instance=request.user)
     if request.method == 'POST':
         picture_form = UpdatePictureForm(request.POST, request.FILES, instance=request.user)
         form = UpdateUserNameForm(request.POST, instance=request.user)
-        if form.is_valid() and picture_form.is_valid():
+        password_form = UpdatePasswordForm(request.POST, instance=request.user)
+        if form.is_valid() and picture_form.is_valid() and password_form.is_valid():
             user = form.save()
             picture_form.save()
+            new_password = password_form.cleaned_data['password']
+            if new_password:
+                user.set_password(new_password)
+                user.save()
+                update_session_auth_hash(request, user)
         else:
             picture_form = UpdatePictureForm(instance=request.user)
             form = UpdateUserNameForm(instance=request.user)
-    return render(request, 'settings.html', {'form': form, 'picture_form': picture_form})
+    return render(request, 'settings.html', {'form': form, 'picture_form': picture_form, 'password_form': password_form,})
 
 @login_required
 def logout_view(request):

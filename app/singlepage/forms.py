@@ -86,3 +86,17 @@ class UpdatePictureForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['profile_image']
+
+class UpdatePasswordForm(forms.ModelForm):
+    password = forms.CharField(
+        label='',
+        widget=forms.PasswordInput(attrs={'style': 'width: 95%; height: 30%; font-family: "Montserrat"; font-size: 16px; background-color: rgba(198, 182, 182, 0.1); padding: 10px; border: none; border-radius: 7px; color: white; margin: 1% 3%;'}),
+        required=False,
+        max_length=100,
+        min_length=1,
+        error_messages={'required': 'Veuillez entrer un mot de passe'},
+    )
+
+    class Meta:
+        model = User
+        fields = ['password']
