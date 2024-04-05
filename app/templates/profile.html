@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% load static %}
+{% include "./base/navbar.html" %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}">
+    <title>Transcendence</title>
+</head>
+<body>
+    <div class="container">
+        <div class="information-container">
+            <div class="title">Match joué</div>
+            <div class="information">{{ total_matches }}</div>
+            <div class="text">Vous êtes trop fort</div>
+        </div>
+        <div class="information-container">
+            <div class="title">Match perdu</div>
+            <div class="information">{{ lose }}</div>
+            <div class="text">Vous êtes trop nul</div>
+        </div>
+        <div class="information-container">
+            <div class="title">Match gagné</div>
+            <div class="information">{{ win }}</div>
+            <div class="text">Vous êtes trop beau</div>
+        </div>
+    </div>
+</body>
+</html>

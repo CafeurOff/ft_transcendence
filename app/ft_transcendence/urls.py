@@ -34,6 +34,7 @@ urlpatterns = [
     path('update_loss/', views.update_loss, name='update_loss'),
     path('register/', views.register, name='register'),
     path('welcome/', views.welcome, name='welcome'),
+    path('profile/', views.profile, name='profile'),
     path('logout/', views.logout_view, name='logout'),
     path('gamepage/', views.gamepage, name='gamepage'),
     path('settings/', views.settings, name='settings'),

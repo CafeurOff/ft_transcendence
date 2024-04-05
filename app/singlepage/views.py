@@ -95,6 +95,17 @@ def gamepage(request):
         return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
  
 @login_required
+def profile(request):
+    total_matches = request.user.total_matches
+    win = request.user.win
+    lose = request.user.lose
+    if total_matches == 0:
+        win_rate = 0
+    else:
+        win_rate = round((win / total_matches) * 100, 2)
+    return render(request, 'profile.html', {'total_matches': total_matches, 'win': win, 'lose': lose, 'win_rate': win_rate})
+    
+@login_required
 def game(request):
     if request.method == 'POST':
         request.user.total_matches += 1
