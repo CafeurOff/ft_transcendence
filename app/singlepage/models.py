@@ -33,7 +33,8 @@ def delete_old_profile_image(sender, instance, **kwargs):
             if old_instance.profile_image != instance.profile_image:
                 if old_instance.profile_image:
                     old_image_path = old_instance.profile_image.path
-                    if default_storage.exists(old_image_path):
+                    default_image_path = default_storage.path(instance.profile_image.field.default)
+                    if default_storage.exists(old_image_path) and old_image_path != default_image_path:
                         default_storage.delete(old_image_path)
         except User.DoesNotExist:
             pass
