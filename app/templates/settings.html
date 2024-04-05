@@ -15,19 +15,26 @@
 <body>
     <div class="container">
         <h4 class="title">PINGPONG</h4>
-        <form name="UpdateUserNameForm" id="UpdateUserNameForm" method="post" style="resize: none;">
+        <form name="UpdateUserNameForm" id="UpdateUserNameForm" method="post" style="resize: none;" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="username-container">
                 <div class="title">Nom d’utilisateur</div>
-                <div class="information">Modifiez mon nom d’utilistaeur</div>
+                <div class="information">Modifiez mon nom d’utilisateur</div>
                 {{ form.username }}
                 <input type="submit" value="Changer mon nom" class="button">
             </div>
             <div class="password-container">
                 <div class="title">Mot de passe</div>
                 <div class="information">Modifiez mon mot de passe</div>
-                {{ password_form }}
+                <!-- FORM -->
                 <input type="submit" value="Changer mon mot de passe" class="button">
+            </div>
+            <div class="picture-container">
+                <div class="title">Photo de profil</div>
+                <div class="information">Modifiez ma photo de profil</div>
+                <img src="{{ request.user.profile_image.url }}" alt="profile picture" class="profile-picture">
+                {{ picture_form }}
+                <input type="submit" value="Changer ma photo de profil" class="button">
             </div>
     </div>
 </body>

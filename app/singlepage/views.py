@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import UsernamesForm, PasswordForm, SignupForm, UpdateUserNameForm
+from .forms import UsernamesForm, PasswordForm, SignupForm, UpdateUserNameForm, UpdatePictureForm  
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
@@ -52,13 +52,19 @@ def register(request):
 @login_required
 def settings(request):
     form = UpdateUserNameForm(instance=request.user)
+    picture_form = UpdatePictureForm(instance=request.user)
     if request.method == 'POST':
+        picture_form = UpdatePictureForm(request.POST, request.FILES, instance=request.user)
         form = UpdateUserNameForm(request.POST, instance=request.user)
-        if form.is_valid():
+        if form.is_valid() and picture_form.is_valid():
             user = form.save()
+            picture_form.save()
+            messages.success(request, 'Votre compte a été mis à jour')
         else:
+            messages.error(request, 'Veuillez corriger les erreurs')
+            picture_form = UpdatePictureForm(instance=request.user)
             form = UpdateUserNameForm(instance=request.user)
-    return render(request, 'settings.html', {'form': form})
+    return render(request, 'settings.html', {'form': form, 'picture_form': picture_form})
 
 def logout_view(request):
     if request.user.is_authenticated:

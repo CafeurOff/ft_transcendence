@@ -76,3 +76,14 @@ class UpdateUserNameForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username']
+
+class UpdatePictureForm(forms.ModelForm):
+    picture = forms.ImageField(
+        label='',
+        widget=forms.FileInput(attrs={'style': 'width: 95%; height: 30%; font-family: "Montserrat"; font-size: 16px; background-color: rgba(198, 182, 182, 0.1); padding: 10px; border: none; border-radius: 7px; color: white; margin: 1% 3%;'}),
+        required=False,
+    )
+
+    class Meta:
+        model = User
+        fields = ['profile_image']
