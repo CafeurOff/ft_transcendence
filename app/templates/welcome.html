@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 {% load static %}
 {% include "./base/navbar.html" %}
+
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,13 +13,15 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}">
     <title>Transcendence</title>
 </head>
-<body>
-    <div class="container">
-        <h4 class="title">PINGPONG</h4>
-        <div class="information-container">
-            <div class="title">👋 Bienvenue, {{ user.get_username }} !</div>
-            <div class="information">Vous, êtes actuellement sur la page d’accueil, Si vous souhaitez jouer à un super jeu. Vous pouvez cliquer sur la catégorie “Jeu” Dans la barre de navigation ci-dessus</div>
-        </div>
+<body class="w-100">
+
+    <div class="mx-5 mt-3">
+    <h4 class="text-white">PINGPONG</h4>
+
+    <div class="information-container p-3 mt-2 text-white">
+        <p class="fw-bold fs-4 mb-2">👋 Bienvenue, {{ user.get_username }} !</p>
+        <p class="fw-medium fs-6">Vous, êtes actuellement sur la page d’accueil, Si vous souhaitez jouer à un super jeu. Vous pouvez cliquer sur la catégorie “Jeu” Dans la barre de navigation ci-dessus</p>
     </div>
+
 </body>
 </html>
