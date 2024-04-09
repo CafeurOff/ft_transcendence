@@ -10,6 +10,7 @@ from django.contrib.auth import update_session_auth_hash
 from singlepage.models import User
 import time
 
+
 # View Index page : localhost:8000/
 def index(request):
     if request.user.is_authenticated:
@@ -59,14 +60,17 @@ def settings(request):
         picture_form = UpdatePictureForm(request.POST, request.FILES, instance=request.user)
         form = UpdateUserNameForm(request.POST, instance=request.user)
         password_form = UpdatePasswordForm(request.POST, instance=request.user)
-        if form.is_valid() and picture_form.is_valid() and password_form.is_valid():
+        if form.is_valid() and picture_form.is_valid():
             user = form.save()
             picture_form.save()
+        if password_form.is_valid():
             new_password = password_form.cleaned_data['password']
-            if new_password:
+            if new_password is not None and new_password != '':
                 user.set_password(new_password)
                 user.save()
                 update_session_auth_hash(request, user)
+            else:
+                password_form = UpdatePasswordForm(instance=request.user)
         else:
             picture_form = UpdatePictureForm(instance=request.user)
             form = UpdateUserNameForm(instance=request.user)
@@ -104,7 +108,11 @@ def profile(request):
     else:
         win_rate = round((win / total_matches) * 100, 2)
     return render(request, 'profile.html', {'total_matches': total_matches, 'win': win, 'lose': lose, 'win_rate': win_rate})
-    
+
+@login_required
+def friends(request):
+    return render(request, 'friends.html')
+
 @login_required
 def game(request):
     if request.method == 'POST':
