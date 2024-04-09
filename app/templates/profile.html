@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 {% load static %}
 {% include "./base/navbar.html" %}
+
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,22 +13,53 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}">
     <title>Transcendence</title>
 </head>
-<body>
-    <div class="container">
-        <div class="information-container">
-            <div class="title">Match joué</div>
-            <div class="information">{{ total_matches }}</div>
-            <div class="text">Vous êtes trop fort</div>
+<body class="w-100">
+    
+    <div class="mx-5 mt-3">
+        <h4 class="text-white">PINGPONG</h4>
+    
+        <div class="information-container p-3 mt-2 text-white">
+            <p class="fw-bold fs-4 mb-2">📈 Votre Profil !</p>
+            <p class="fw-medium fs-6">Vous êtes actuellement sur la page de profil. Ici, vous pouvez voir vos informations personnelles, vos statistiques de jeu et bien plus encore !</p>
         </div>
-        <div class="information-container">
-            <div class="title">Match perdu</div>
-            <div class="information">{{ lose }}</div>
-            <div class="text">Vous êtes trop nul</div>
-        </div>
-        <div class="information-container">
-            <div class="title">Match gagné</div>
-            <div class="information">{{ win }}</div>
-            <div class="text">Vous êtes trop beau</div>
+
+        <div class="row mt-5 text-left fs-5 fw-medium">
+            <div class="col-12 col-md-4">
+                <div class="info-box align-self-start mb-5">
+                    <div class="mb-3">
+                        <label for="username" class="form-label text-white fw-bold fs-4">Nombre de matchs</label>
+                        <br>
+                        <label class="form-label text-secondary fw-lighter fs-6">Nombre de matchs joués</label>
+                        <div class="mb-2">
+                            <p class="text-white fs-3 fw-bold">{{ total_matches }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="info-box align-self-start mb-5">
+                    <div class="mb-3">
+                        <label for="username" class="form-label text-white fw-bold fs-4">Nombre de victoires</label>
+                        <br>
+                        <label class="form-label text-secondary fw-lighter fs-6">Nombre de matchs gagnés</label>
+                        <div class="mb-2">
+                            <p class="text-white fs-3 fw-bold">{{ win }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="info-box align-self-start mb-5">
+                    <div class="mb-3">
+                        <label for="username" class="form-label text-white fw-bold fs-4">Nombre de défaite</label>
+                        <br>
+                        <label class="form-label text-secondary fw-lighter fs-6">Nombre de matchs perdu</label>
+                        <div class="mb-2">
+                            <p class="text-white fs-3 fw-bold">{{ lose }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
