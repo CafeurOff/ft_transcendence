@@ -11,27 +11,53 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}">
     <title>Transcendence</title>
 </head>
-<body>
-    <div class="container">
-        <h4 class="title">PINGPONG</h4>
-        <div class="information-container">
-            <div class="title">🎮 Comment jouer ?</div>
-            <div class="information">Vous êtes actuellement sur la page de Jeu, ci-dessous vous pouvez choisir à quelle mode de jeu vous désirez jouer. Si vous voulez créer un Tournois ou en rejoindre un, dirigez-vous dans la catégorie Tournois.</div>
+<body class="w-100">
+
+
+    <div class="mx-5 mt-3">
+        <h4 class="title text-white">PINGPONG</h4>
+
+        <div class="information-container p-3 mt-2 text-white">
+            <p class="fw-bold fs-4 mb-2">🎮 Comment jouer ?</p>
+            <p class="fw-medium fs-6">Vous êtes actuellement sur la page de Jeu, ci-dessous vous pouvez choisir à quelle mode de jeu vous désirez jouer. Si vous voulez créer un Tournois ou en rejoindre un, dirigez-vous dans la catégorie Tournois.</p>
         </div>
-        <div class="page-container">
-            <h1>Choisissez votre mode de jeu</h1>
-            <button class="custom-button" onclick="launchGame('{% url 'game' %}', '/game')">
-                <img src="{% static 'images/local.png' %}" alt="Local game">
-                <span>Local</span>
-                <h6>Jouez contre votre ami sur le même clavier !</h6>
-            </button>
-            <button class="custom-button" onclick="launchGame('{% url 'gameia' %}', '/game/ia')">
-                <img src="{% static 'images/ia.png' %}" alt="Online game">
-                <span>IA</span>
-                <h6>Défiez-vous en jouant contre une IA de différents niveaux !</h6>
-            </button>
-        </div>        
+
+        <div class="mt-3 text-center">
+
+            <h1 class="fs-3 fw-bold text-white mb-5">Choisissez votre mode de jeu</h1>
+
+            <div class="d-flex flex-row justify-content-center align-items-center">
+
+                <div class="container">
+                    <div class="row gap-5 justify-content-center">
+                        <div class="col-md-4">
+                            <div class="bg-gamecard rounded-2 pb-10" onclick="launchGame('{% url 'game' %}', '/game')">
+                                <img src="{% static 'images/local.png' %}" alt="Local game" class="img-fluid">
+
+                                <div class="mt-3">
+                                    <p class="fs-3 fw-bold text-white">Local</p>
+                                    <p class="fs-6 fw-medium text-white">Jouez contre un ami sur le même ordinateur !</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="bg-gamecard rounded-2 pb-10" onclick="launchGame('{% url 'gameia' %}', '/game')">
+                                <img src="{% static 'images/ia.png' %}" alt="Online game" class="img-fluid">
+
+                                <div class="mt-3">
+                                    <p class="fs-3 fw-bold text-white">IA</p>
+                                    <p class="fs-6 fw-medium text-white">Jouez contre l'ordinateur</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>     
+        </div>   
     </div>
+
+
 </body>
 <script>
     function launchGame(url, redirectUrl) {
