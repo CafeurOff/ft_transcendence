@@ -17,7 +17,8 @@
 .container .bg-gamecard {
     transition: all 0.3s;
     background: #1A1A1A;
-    box-shadow: 0 0 2vh 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1vh 1vh 0 rgba(0,0,0,0.25);
+
 }
 
 .container .bg-gamecard:hover {

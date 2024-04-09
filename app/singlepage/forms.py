@@ -86,7 +86,10 @@ class SignupForm(UserCreationForm):
 class UpdateUserNameForm(forms.ModelForm):
     username = forms.CharField(
         label='',
-        widget=forms.TextInput(attrs={'style': 'width: 95%; height: 30%; font-family: "Montserrat"; font-size: 16px; background-color: rgba(198, 182, 182, 0.1); padding: 10px; border: none; border-radius: 7px; color: white; margin: 1% 3%;'}),
+        widget=forms.TextInput(attrs={
+            'class': "form-control placeholder-style",
+            'placeholder': 'Nom d’utilisateur',
+            'style': 'background-color: rgba(198, 182, 182, 0.1); border: none; border-radius: 4px; color: white;'}),
         required=False,
         max_length=20,
         min_length=1,
@@ -98,8 +101,9 @@ class UpdateUserNameForm(forms.ModelForm):
         fields = ['username']
 
 class UpdatePictureForm(forms.ModelForm):
-    profile_image = forms.FileField(widget=forms.FileInput(
-        attrs={'class': 'form-control-file', 'id': 'profile-image-input'}))
+    profile_image = forms.FileField(widget=forms.FileInput(attrs={
+        'class': 'form-control form-control-sm',
+        'id': 'profile-image-input'}))
     class Meta:
         model = User
         fields = ['profile_image']
@@ -107,7 +111,11 @@ class UpdatePictureForm(forms.ModelForm):
 class UpdatePasswordForm(forms.ModelForm):
     password = forms.CharField(
         label='',
-        widget=forms.PasswordInput(attrs={'style': 'width: 95%; height: 30%; font-family: "Montserrat"; font-size: 16px; background-color: rgba(198, 182, 182, 0.1); padding: 10px; border: none; border-radius: 7px; color: white; margin: 1% 3%;'}),
+        widget=forms.PasswordInput(attrs={
+            'class': "form-control placeholder-style",
+            'placeholder': "Mot de passe",
+            'style': 'background-color: rgba(198, 182, 182, 0.1); border: none; border-radius: 7px; color: white;',
+            }),
         required=False,
         max_length=100,
         min_length=1,

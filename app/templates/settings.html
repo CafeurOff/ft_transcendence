@@ -2,6 +2,7 @@
 {% load static %}
 {% include "./base/navbar.html" %}
 
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,38 +11,79 @@
     <link rel="stylesheet" href="{% static 'css/settings.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}">
+    <script src="{% static 'js/validateForm.js' %}"></script>
     <title>Transcendence</title>
 </head>
-<body>
-    <div class="container">
-        <h4 class="title">PINGPONG</h4>
-        <form name="UpdateUserNameForm" id="UpdateUserNameForm" method="post" style="resize: none;" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="username-container">
-                <div class="title">Nom d’utilisateur</div>
-                <div class="information">Modifiez mon nom d’utilisateur</div>
-                {{ form.username }}
-                <input type="submit" value="Changer mon nom" class="button">
-            </div>
-            <div class="password-container">
-                <div class="title">Mot de passe</div>
-                <div class="information">Modifiez mon mot de passe</div>
-                {{ password_form }}
-                <input type="submit" value="Changer mon mot de passe" class="button">
-            </div>
-            <div class="picture-container">
-                <div class="title">Photo de profil</div>
-                <div class="information">Modifiez ma photo de profil</div>
-                <img id="profile-image-preview" src="{% if request.user.profile_image %}{{ request.user.profile_image.url }}{% else %}/path/to/default/profile/image{% endif %}" alt="profile picture" class="profile-picture">
-                <div class="custom-file mb-3">
-                    {{ picture_form.profile_image }}
-                    <label class="custom-file-label" for="profile-image-input">Choisir un fichier</label>
+
+<body class="w-100">
+
+    <div class="mx-5 mt-3">
+        <h4 class="text-white">PINGPONG</h4>
+
+        <div class="information-container p-3 mt-2 text-white">
+            <p class="fw-bold fs-4 mb-2">🔧 Paramètres !</p>
+            <p class="fw-medium fs-6">Vous, êtes actuellement sur la page de paramètres, vous pouvez modifier votre nom d'utilisateur, votre mot de passe et votre image de profil.</p>
+        </div>
+
+        <form action="{% url 'settings' %}" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <div class="row mt-5 text-left fs-5 fw-medium">
+                <div class="col-12 col-md-5">
+                    <div class="param-box align-self-start mb-5">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label text-white fw-bold fs-4">Nom d'utilisateur</label>
+                            <br>
+                            <label class="form-label text-secondary fw-lighter fs-6">Modifiez mon nom d’utilisateur</label>
+                            <div class="mb-2">
+                                {{ form.username }}
+                            </div>
+                            <button type="submit" class="btn btn-primary text-center custom-btn custom-btn-width">Changer mon nom</button>
+                        </div>
+                    </div>
                 </div>
-                <input type="submit" value="Changer ma photo de profil" class="button">
+
+                <div class="col-12 col-md-6 offset-md-1">
+                    <div class="param-box align-self-start mb-5">
+                        <div class="mb-3">
+                            <label for="password" class="form-label text-white fw-bold fs-4">Mot de passe</label>
+                            <br>
+                            <label class="form-label text-secondary fw-lighter fs-6">Modifiez mon mot de passe</label>
+                            <div class="mb-2">
+                                {{ password_form }}
+                            </div>
+                            <button type="submit" class="btn btn-primary text-center custom-btn custom-btn-width">Changer mon mot de passe</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-5">
+                    <div class="param-box align-self-start mb-5">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <label for="profile-image" class="form-label text-white fw-bold fs-4">Image de profil</label>
+                                    <br>
+                                    <label class="form-label text-secondary fw-lighter fs-6">Modifiez mon image de profil</label>
+                                </div>
+                                <img id="profile-image-preview" src="{% if request.user.profile_image %}{{ request.user.profile_image.url }}{% else %}/path/to/default/profile/image{% endif %}" alt="profile picture" class="profile-picture rounded-circle" style="width: 64px; height: 64px;">
+                            </div>
+                        </div>
+                        <div class="custom-file mb-2 w-100">
+                            {{ picture_form.profile_image }}
+                            <label class="custom-file-label text-center text-white fs-6 fw-lighter" for="profile-image-input" accept="image/*">Choisir un fichier</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary text-center custom-btn custom-btn-width">Changer mon image</button>
+                    </div>
+                </div>
+
+
             </div>
         </form>
-    </div>    
+    </div>
+
 </body>
+
+
 <script>
     document.getElementById('profile-image-input').addEventListener('change', function(event) {
         var input = event.target;
@@ -54,4 +96,5 @@
         reader.readAsDataURL(input.files[0]);
     });
 </script>
+
 </html>

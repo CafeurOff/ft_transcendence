@@ -1,90 +1,44 @@
-div.container h4 {
+* {
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.8vw;
-    font-weight: bolder;
-    color: #f8f8f8;
-    margin: -5px 100px 0px -300px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-div.username-container {
-    border-radius: 4px;
-    background: #1C1B1B;
-    width: 45%;
-    height: 17%;
-    position: absolute;
-    top: 12%;
-    left: 3.5%;
-    display: flex;
-    flex-direction: column;
-    space-between: 10px;
-    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+.information-container {
+    border-radius: 7px;
+    background: #242222;
 }
 
-div.password-container {
-    border-radius: 4px;
-    background: #1C1B1B;
-    width: 45%;
-    height: 17%;
-    position: absolute;
-    top: 12%;
-    left: 52%;
-    display: flex;
-    flex-direction: column;
-    space-between: 10px;
-    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
-}
-
-div.picture-container {
-    border-radius: 4px;
-    background: #1C1B1B;
-    width: 45%;
-    height: 17%;
-    position: absolute;
-    top: 35%;
-    left: 3.5%;
-    display: flex;
-    flex-direction: column;
-    space-between: 10px;
-    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
-}
-
-div.picture-container img {
-    margin: -5% 0% 0% 95%;
-}
-
-div.title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1vw;
-    font-weight: lighter;
-    color: #f8f8f8;
-    margin: 10px 0px 0px 20px;
-}
-
-div.information {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.8vw; 
-    font-weight: lighter;
-    color: #6A6A6A;
-    margin: 1px 20px; 
-}
-
-input[type=submit] {
-    background-color: #286B3B;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: lighter;
-    font-size: 0.8vw;
-    border-radius: 4px;
-    border: none;
-    outline: none;
-    color: white;
-    margin: 1% 3%;
+.w-95 {
     width: 95%;
-    height: 15%;
 }
 
-input[type=submit]:hover {
-    background-color: rgba(28, 61, 2, 0.596);
-    cursor: pointer;
+.pb-10 {
+    padding-bottom: 100px;
+}
+
+.param-box {
+    background-color: #1C1B1B;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 1vh 1vh 0 rgba(0,0,0,0.25);
+}
+
+.btn.custom-btn {
+    background-color: #286B3B;
+    color: white;
+    border: none;   
+}
+
+.btn.custom-btn:hover {
+    background-color: #1e572e;
+    color: white;
+}
+
+.btn.custom-btn-width {
+    width: 100%;
 }
 
 .custom-file input[type=file] {
@@ -93,37 +47,11 @@ input[type=submit]:hover {
     cursor: pointer;
 }
 
-.custom-file {
-    width: 95%;
-    height: 30%;
-    margin-bottom: 20px; 
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.7vw;
-    font-weight: lighter;
-}
 
 .custom-file-label {
     width: 100%;
     height: 70%;
-    padding: 10px;
-    border: none;
-    margin: 1% 3%;
-    color: #ffffff;
+    padding: 7px;
     background-color: rgba(198, 182, 182, 0.1);
     border-radius: 7px;
-}
-
-.custom-file-input {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    height: calc(2.25rem + 2px);
-    margin: 0;
-    opacity: 0;
-}
-
-.custom-file-input:focus ~ .custom-file-label {
-    border-color: #80bdff;
-    box-shadow: 0 0 0 .2rem rgba(0, 123, 255, .25);
 }

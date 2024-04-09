@@ -14,10 +14,11 @@ body {
 }
 
 .register-container {
-    width: 40vh;
     padding: 30px;
     background-color: #3D3939;
     border-radius: 7px;
+    margin-left: 5vh;
+    margin-right: 5vh;
 }
 
 .h-35 {
