@@ -162,17 +162,20 @@ function handleKeyPress() {
 
 // Boucle sur le jeu 
 function gameLoop() {
-    update();
-    draw();
-    handleKeyPress()
-    if (player1Score < 5 && player2Score < 5) {
-        requestAnimationFrame(gameLoop);
-    } else {
-        endGame();
+    if (gameStarted)
+    {
+        update();
+        draw();
+        handleKeyPress()
+        if (player1Score < 5 && player2Score < 5) {
+            requestAnimationFrame(gameLoop);
+        } else {
+            endGame();
+        }
     }
 }
 
 document.addEventListener('keydown', handleKeydown);
 document.addEventListener('keyup', handleKeyup);
-gameLoop();
+//gameLoop();
 

@@ -6,7 +6,7 @@ const ctx = canvas.getContext('2d');
 const paddleWidth = 10;
 const paddleHeight = 100;
 const paddleSpeed = 2;
-const paddleSpeedIa = 1;
+const paddleSpeedIa = 2;
 const ballRadius = 10;
 const initialBallSpeed = 1.5;
 const maxBallSpeed = 4;
@@ -80,11 +80,11 @@ function getRandomNumber(min, max) {
 
 function update() {
     // Faire bouger la balle
-    if (ballSpeedX < maxBallSpeed && ballSpeedY < maxBallSpeed)
-    {
+    //if (ballSpeedX < maxBallSpeed && ballSpeedY < maxBallSpeed)
+    //{
         ballX += ballSpeedX;
         ballY += ballSpeedY;
-    }
+    //}
 
     // Envoyer la balle dans l'autre sens si elle touche le haut ou le bas
     if ((ballY + ballRadius >= canvas.height || ballY - ballRadius <= 0)) {
@@ -122,10 +122,18 @@ function update() {
     if (Math.abs(ballSpeedX) < maxBallSpeed) {
         ballSpeedX += ballSpeedX > 0 ? 0.0001 : -0.0001;
     }
+	else
+	{
+		ballSpeedX = maxBallSpeed;
+	}
 
     if (Math.abs(ballSpeedY) < maxBallSpeed) {
         ballSpeedY += ballSpeedY > 0 ? 0.0001 : -0.0001;
     }
+	else
+	{
+		ballSpeedY = maxBallSpeed;
+	}
 }
 
 //Replacer la balle au centre
@@ -164,74 +172,37 @@ function handleKeyPress() {
     //    player1Y += paddleSpeed;
 }
 
-let refreshView = 1000;
+let difficultylevel = "easy";
+//function for the IA is easy to beat
+function computerMovement() {
 
-function moveIa(level)
-{
-    setTimeout(() => {
-        //let estimatedBallY = ballY + ballSpeedY * 1000;
+	let paddleSpeedIaAdjusted = paddleSpeedIa;
 
-        if (level == '1')
-        {
-            IaSpeed = 150;
-            IaPrecision = 40;
-        }
-        else if (level == '2')
-        {
-            IaSpeed = 100;
-            IaPrecision = 30;
-        }
-        else if (level == '3')
-        {
-            IaSpeed = 50;
-            IaPrecision = 20;
-        }
-        console.log(IaSpeed);
-        console.log(IaPrecision);
-        let randomOffset = getRandomNumber(-20, 20);
-        if (Math.random() < 0.8) {
-            let targetY = ballY + randomOffset;
-            if (targetY < computerY + paddleHeight / 2 && computerY > 0) {
-                computerY -= paddleSpeedIa / IaPrecision; 
-            }
-            else if (targetY > computerY + paddleHeight / 2 && 
-                computerY < canvas.height - paddleHeight) {
-                computerY += paddleSpeedIa / IaPrecision;
-            }
-        }
-        moveIa(level);
-    }, refreshView);
+	let precision = 0.5;
+	if (difficultylevel === "easy") {
+		precision = getRandomNumber(0.3, 0.6);
+	}
+	else if (difficultylevel === "medium") {
+		precision = getRandomNumber(0.6, 0.9);
+	}
+	else if (difficultylevel === "hard") {
+		precision = getRandomNumber(0.9, 1.2);
+	}
+
+	if (ballY > computerY + paddleHeight / 2 && computerY < canvas.height - paddleHeight) {
+		computerY += paddleSpeedIa * precision;
+	} else if (ballY < computerY + paddleHeight / 2 && computerY > 0) {
+		computerY -= paddleSpeedIa * precision;
+	}
 }
 
-/*function IaLvl1()
-{
-    setTimeout(() => {
-
-        let randomOffset = getRandomNumber(-20, 20);
-        if (Math.random() < 0.8) {
-            let targetY = ballY + randomOffset;
-            if (targetY < computerY + paddleHeight / 2 && computerY > 0) {
-                computerY -= paddleSpeedIa / IaPrecision; 
-            }
-            else if (targetY > computerY + paddleHeight / 2 && 
-                computerY < canvas.height - paddleHeight) {
-                computerY += paddleSpeedIa / IaPrecision;
-            }
-        }
-        IaLvl1();
-
-    }, refreshView);
-}*/
- 
 // Boucle sur le jeu 
 function gameLoop() {
     update();
     draw();
-    moveIa('3');
-    //IaLvl1();
     handleKeyPress();
-
-    if (player1Score < 10 && computerScore < 10) {
+	computerMovement();
+    if (player1Score < 5 && computerScore < 5) {
         requestAnimationFrame(gameLoop);
     } else {
         endGame();
@@ -240,7 +211,7 @@ function gameLoop() {
 
 // Afficher qui a gagné
 function endGame() {
-    if (player1Score === 10) {
+    if (player1Score === 5) {
         drawText("You win !", 350, 250, 'red');
     } else {
         drawText("IA wins !", 350, 250, 'red');

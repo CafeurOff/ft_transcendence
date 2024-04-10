@@ -14,6 +14,9 @@
         <div class="mx-5 mt-3">
             <h4 class="title text-white">PINGPONG</h4>
         </div>
+        <div id="start-container" class="text-center mt-3">
+            <button id="start-button" onclick="startGame()">Start Game</button>
+        </div>
         <canvas id="pongCanvas" width="800" height="400"></canvas>
         <div id="score-container">
             <div id="player1-score">0</div>
@@ -21,6 +24,13 @@
         </div>
         <script>
             const username = "{{ user.get_username }}";
+
+            function startGame() {
+                // FAIRE UNE FONCTION QUI LANCE LE JEU 
+                //      LORSQUE L'ON CLIQUE SUR LE BOUTON
+                // LE FAIRE AUSSI SUR L'IA
+            }
+
             function endGame() {
             if (player1Score === 5) {
                 fetch('{% url 'update_score' %}', {
