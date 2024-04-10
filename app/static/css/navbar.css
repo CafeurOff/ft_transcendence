@@ -19,6 +19,12 @@ body {
     color: white !important;
     font-size: 2vh;
     margin-right: 2vh;
+    transition: all 0.3s;
+}
+
+.nav-link:hover {
+    color: grey !important;
+    transition: all 0.3s;
 }
 
 .nav-link.active {
