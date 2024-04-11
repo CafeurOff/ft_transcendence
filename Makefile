@@ -12,7 +12,7 @@ start:
 	@docker-compose up -d --build
 	@echo "${GREEN}Transcendence is running on http://localhost:8080${NC}"
 	@echo "${GREEN}Initiating Vault script...${NC}"
-	@bash ./vault_init.sh
+	@bash ./configuration/vault/vault_init.sh
 	@echo "${GREEN}Vault is running on http://localhost:8200${NC}"
 	@echo "${GREEN}Transcendence is ready!${NC}"
 
