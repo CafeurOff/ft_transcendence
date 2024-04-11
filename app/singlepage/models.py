@@ -16,6 +16,7 @@ class User(AbstractUser):
     win = models.IntegerField(default=0, blank=True)
     lose = models.IntegerField(default=0, blank=True)   
 
+
     def __str__(self):
         return self.usernames
 

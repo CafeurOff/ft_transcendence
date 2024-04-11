@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from singlepage.models import User
 import time
-
+import json
 
 # View Index page : localhost:8000/
 def index(request):
@@ -63,6 +63,7 @@ def settings(request):
         if form.is_valid() and picture_form.is_valid():
             user = form.save()
             picture_form.save()
+            messages.success(request, 'Votre profil a été mis à jour avec succès')
         if password_form.is_valid():
             new_password = password_form.cleaned_data['password']
             if new_password is not None and new_password != '':
@@ -111,7 +112,9 @@ def profile(request):
 
 @login_required
 def friends(request):
-    return render(request, 'friends.html')
+    userList = User.objects.all()
+    print(userList[0].profile_image)
+    return render(request, 'friends.html', {'users': userList})
 
 @login_required
 def game(request):
@@ -156,3 +159,17 @@ def handler404(request, exception):
     
 def handler500(request):
     return render(request, 'base/500.html', status=500)
+
+def search_friends(request):
+    if request.method == 'POST':
+        search = json.load(request)['search']
+        userList = User.objects.filter(username__icontains=search)
+
+        userData = []
+        for user in userList:
+            userData.append({
+                'username': user.username,
+                'profile_image': request.build_absolute_uri(user.profile_image.url)
+            })
+
+        return JsonResponse({'users': list(userData)})
