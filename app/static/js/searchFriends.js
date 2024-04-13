@@ -1,6 +1,7 @@
 const searchInput = document.getElementById("search");
 const usersContainer = document.getElementById("users");
 
+
 searchInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
         fetch(searchUrl, {
@@ -16,9 +17,9 @@ searchInput.addEventListener('keydown', (event) => {
         })
         .then(response => response.json())
         .then(response => {
+            console.log(response);
             usersContainer.innerHTML = '';
-
-            if (response.users.length === 0) {
+            if (response.users.length === 0 || searchInput.value === '' ) {
                 usersContainer.innerHTML = `
                     <div class="col-12 d-flex justify-content-center">
                         <p class="fw-bold fs text-white">Aucun utilisateur trouvé</p>
@@ -26,19 +27,24 @@ searchInput.addEventListener('keydown', (event) => {
                 `;
             } else {
                 response.users.forEach((user) => {
+                    let addButtonLabel = user.is_friend ? "Déjà amis" : "Ajouter";
+                    let disabledAttribute = user.is_friend ? "disabled" : "";
+                    if (user.is_self) {
+                        addButtonLabel = "Vous";
+                        disabledAttribute = "disabled";
+                    }
                     usersContainer.innerHTML += `
                         <div class="col-4 d-flex justify-content-center">
-                            <div class="user-card p-3 bg-dark text-white">
+                            <div class="user-card p-3 bg-dark text-white rounded-5">
                                 <img src="${user.profile_image}" class="rounded-circle" width="100" height="100">
                                 <p class="fw-bold fs-5 text-center">${user.username}</p>
-
                                 <div class="d-flex justify-content-center items-center">
-                                    <button class="btn btn-primary" onclick="addFriend('${user.username}')">Ajouter</button>
+                                    <button class="btn btn-primary" id="add-button" onclick="addFriend('${user.id}')" ${disabledAttribute}>${addButtonLabel}</button>
                                 </div>
                             </div>
                         </div>
                     `;
-                });
+                });                                
             }
         });
     }

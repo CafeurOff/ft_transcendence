@@ -7,9 +7,10 @@ from .forms import UsernamesForm, PasswordForm, SignupForm, UpdateUserNameForm, 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
-from singlepage.models import User
+from singlepage.models import User, Friend
 import time
 import json
+from django.contrib.auth import get_user_model
 
 # View Index page : localhost:8000/
 def index(request):
@@ -85,11 +86,24 @@ def logout_view(request):
 
 @login_required
 def welcome(request):
+    my_friends = Friend.objects.filter(user1_uid_id=request.user.id)
+    friends = []
+    for friend in my_friends:
+        friend_user = get_user_model().objects.get(id=friend.user2_uid.id)
+        friend_is_online = friend_user.is_online
+        online_status = 'En ligne' if friend_is_online else 'Hors ligne'
+        friends.append({
+            'username': friend_user.username,
+            'profile_image': request.build_absolute_uri(friend_user.profile_image.url),
+            'id': friend_user.id,
+            'is_online': online_status
+        })
     if request.user.is_authenticated:
-        return render(request, 'welcome.html', {'user': request.user})
+        return render(request, 'welcome.html', {'user': request.user, 'friends': friends})
     else:
         message = 'Vous devez être connecté pour accéder à cette page'
         return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
+
 
 @login_required
 def gamepage(request):
@@ -164,12 +178,29 @@ def search_friends(request):
     if request.method == 'POST':
         search = json.load(request)['search']
         userList = User.objects.filter(username__icontains=search)
-
+        friends = Friend.objects.filter(user1_uid_id=request.user.id)
         userData = []
         for user in userList:
             userData.append({
                 'username': user.username,
-                'profile_image': request.build_absolute_uri(user.profile_image.url)
+                'profile_image': request.build_absolute_uri(user.profile_image.url),
+                'id': user.id,
+                'is_friend': friends.filter(user2_uid_id=user.id).exists(),
+                'is_self': user.id == request.user.id
             })
 
         return JsonResponse({'users': list(userData)})
+
+def add_friends(request):
+    if request.method == 'POST':
+        id = json.load(request)['id']
+        from_to = request.user.id
+        to_id = id
+        friend_request, created = Friend.objects.get_or_create(user1_uid_id=from_to, user2_uid_id=to_id)
+        if created:
+            return JsonResponse({'friend_request': True})
+        else:
+            return JsonResponse({'friend_request': False})
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
