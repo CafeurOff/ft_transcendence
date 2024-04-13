@@ -6,8 +6,8 @@ from singlepage.models import User
 from django.forms import ImageField, FileInput
 from django.forms.widgets import ClearableFileInput
 
-
-
+# Form for the login page with username and password fields and a submit button
+############################################################################################################
 class UsernamesForm(forms.Form):        
     usernames = forms.CharField(
         label='',
@@ -83,6 +83,12 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ('username', 'password1', 'password2')
 
+        
+############################################################################################################
+
+# Form for updating the username, profile picture and password of a user in the settings page
+
+############################################################################################################
 class UpdateUserNameForm(forms.ModelForm):
     username = forms.CharField(
         label='',
@@ -125,3 +131,5 @@ class UpdatePasswordForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['password']
+
+############################################################################################################

@@ -25,8 +25,9 @@ handler500 = 'singlepage.views.handler500'
 handler404 = 'singlepage.views.handler404'
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    # Main pages
     path('admin/', admin.site.urls), # Admin page localhost:8000/admin
+    path('', views.index, name='index'), # Index page localhost:8000
     path('game/', views.game, name='game'), # Game page localhost:8000/game
     path('game/ia', views.gameia, name='gameia'), # Game page localhost:8000/game/ia
     path('register/', views.register, name='register'), # Register page localhost:8000/register

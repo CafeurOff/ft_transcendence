@@ -1,6 +1,9 @@
+// Autor: Lorenzo & Lartaxx & Wasied
+// Function that sends a POST request to add a friend to the user's friend list
+
+
 const searchInput = document.getElementById("search");
 const usersContainer = document.getElementById("users");
-
 
 searchInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {

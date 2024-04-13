@@ -12,7 +12,18 @@ import time
 import json
 from django.contrib.auth import get_user_model
 
-# View Index page : localhost:8000/
+
+############################################################################################################
+# All the views of the application
+# Each view is a function that takes a request as an argument and returns a response
+# The response can be a rendered template, a redirect, a JSON response, etc.
+############################################################################################################
+
+# View Index page : localhost:8000/ 
+# This view is the main page of the application
+# It displays a login form and a register link
+# If the user is already authenticated, it redirects to the welcome page
+
 def index(request):
     if request.user.is_authenticated:
         return redirect('/welcome/')
@@ -35,6 +46,10 @@ def index(request):
     return render(request, 'index.html', {'form': form, 'password_form': password_form, 'message': message})
 
 # View Register page : localhost:8000/register/
+# This view displays a registration form
+# If the form is valid, it creates a new user and logs them in
+# If the user is already authenticated, it redirects to the welcome page
+
 def register(request):
     if request.user.is_authenticated:
         return redirect('/welcome/')
@@ -51,6 +66,36 @@ def register(request):
             return render(request, 'register.html', {'form': form, 'message': message})
     return render(request, 'register.html', {'form': form})
 
+# View Welcome page : localhost:8000/welcome/
+# This view displays the welcome page of the application
+# It displays the user's profile picture, username, and a list of friends
+# If the user is not authenticated, it redirects to the index page
+
+@login_required
+def welcome(request):
+    my_friends = Friend.objects.filter(user1_uid_id=request.user.id)
+    friends = []
+    for friend in my_friends:
+        friend_user = get_user_model().objects.get(id=friend.user2_uid.id)
+        friend_is_online = friend_user.is_online
+        online_status = 'En ligne' if friend_is_online else 'Hors ligne'
+        friends.append({
+            'username': friend_user.username,
+            'profile_image': request.build_absolute_uri(friend_user.profile_image.url),
+            'id': friend_user.id,
+            'is_online': online_status
+        })
+    if request.user.is_authenticated:
+        return render(request, 'welcome.html', {'user': request.user, 'friends': friends})
+    else:
+        message = 'Vous devez être connecté pour accéder à cette page'
+        return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
+
+# View Settings page : localhost:8000/settings/
+# This view displays the settings page of the application
+# It allows the user to update their username, profile picture, and password
+# If the form is valid, it updates the user's information and displays a success message
+# If the user is not authenticated, it redirects to the index page
 
 @login_required
 def settings(request):
@@ -78,41 +123,11 @@ def settings(request):
             form = UpdateUserNameForm(instance=request.user)
     return render(request, 'settings.html', {'form': form, 'picture_form': picture_form, 'password_form': password_form,})
 
-@login_required
-def logout_view(request):
-    if request.user.is_authenticated:
-        logout(request)
-    return redirect('/')
+# View Profile page : localhost:8000/profile/
+# This view displays the profile page of the application
+# It displays the user's total matches, wins, losses, and win rate
+# If the user is not authenticated, it redirects to the index page
 
-@login_required
-def welcome(request):
-    my_friends = Friend.objects.filter(user1_uid_id=request.user.id)
-    friends = []
-    for friend in my_friends:
-        friend_user = get_user_model().objects.get(id=friend.user2_uid.id)
-        friend_is_online = friend_user.is_online
-        online_status = 'En ligne' if friend_is_online else 'Hors ligne'
-        friends.append({
-            'username': friend_user.username,
-            'profile_image': request.build_absolute_uri(friend_user.profile_image.url),
-            'id': friend_user.id,
-            'is_online': online_status
-        })
-    if request.user.is_authenticated:
-        return render(request, 'welcome.html', {'user': request.user, 'friends': friends})
-    else:
-        message = 'Vous devez être connecté pour accéder à cette page'
-        return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
-
-
-@login_required
-def gamepage(request):
-    if request.user.is_authenticated:
-        return render(request, 'gamepage.html', {'user': request.user})
-    else:
-        message = 'Vous devez être connecté pour accéder à cette page'
-        return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
- 
 @login_required
 def profile(request):
     total_matches = request.user.total_matches
@@ -124,11 +139,33 @@ def profile(request):
         win_rate = round((win / total_matches) * 100, 2)
     return render(request, 'profile.html', {'total_matches': total_matches, 'win': win, 'lose': lose, 'win_rate': win_rate})
 
+# View Friends page : localhost:8000/friends/
+# This view displays the friends page of the application
+# It displays a list of all users in the database
+# If the user is not authenticated, it redirects to the index page
+
 @login_required
 def friends(request):
     userList = User.objects.all()
-    print(userList[0].profile_image)
     return render(request, 'friends.html', {'users': userList})
+
+# View Game page : localhost:8000/gamepage/
+# This view displays the game page of the application
+# It displays the game page with the user's profile picture, username, and a game
+# If the user is not authenticated, it redirects to the index page
+
+@login_required
+def gamepage(request):
+    if request.user.is_authenticated:
+        return render(request, 'gamepage.html', {'user': request.user})
+    else:
+        message = 'Vous devez être connecté pour accéder à cette page'
+        return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
+ 
+# View Game page : localhost:8000/game/
+# This view displays the game page of the application
+# It displays the game page with the user's profile picture, username, and a game
+# If the user is not authenticated, it redirects to the index page
 
 @login_required
 def game(request):
@@ -137,6 +174,11 @@ def game(request):
         request.user.save()
         return JsonResponse({'success': True})
     return render(request, 'game.html')
+    
+# View Game page : localhost:8000/game/ia
+# This view displays the game page of the application
+# It displays the game page with the user's profile picture, username, and a game
+# If the user is not authenticated, it redirects to the index page
 
 @login_required
 def gameia(request):
@@ -145,6 +187,17 @@ def gameia(request):
         request.user.save()
         return JsonResponse({'success': True})
     return render(request, 'ia.html')
+
+
+############################################################################################################
+# API endpoints
+# Each endpoint is a function that takes a request as an argument and returns a JSON response
+# The JSON response can contain data that is sent to the client
+############################################################################################################
+
+# API endpoint to update the user's score
+# This endpoint is called when the game ends
+# It increments the user's win count by 1
 
 @login_required
 def update_score(request):
@@ -156,6 +209,11 @@ def update_score(request):
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})
+
+# API endpoint to update the user's loss count
+# This endpoint is called when the game ends
+# It increments the user's loss count by 1
+
 @login_required
 def update_loss(request):
     if request.method == 'POST':
@@ -167,12 +225,23 @@ def update_loss(request):
     else:
         return JsonResponse({'success': False})
 
+# Handler for 404 errors
+# This handler is called when a page is not found
+# It renders the 404.html template
 
 def handler404(request, exception):
     return render(request, 'base/404.html', status=404)
-    
+
+# Handler for 500 errors
+# This handler is called when an internal server error occurs
+# It renders the 500.html template
+
 def handler500(request):
     return render(request, 'base/500.html', status=500)
+
+# API endpoint to search for friends
+# This endpoint is called when the user searches for friends
+# It returns a list of users that match the search query
 
 def search_friends(request):
     if request.method == 'POST':
@@ -191,6 +260,11 @@ def search_friends(request):
 
         return JsonResponse({'users': list(userData)})
 
+
+# API endpoint to add friends
+# This endpoint is called when the user sends a friend request
+# It creates a new friend request in the database
+
 def add_friends(request):
     if request.method == 'POST':
         id = json.load(request)['id']
@@ -204,3 +278,13 @@ def add_friends(request):
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})
+
+# API endpoint to log out the user
+# This endpoint is called when the user logs out
+# It logs out the user and redirects to the index page
+
+@login_required
+def logout_view(request):
+    if request.user.is_authenticated:
+        logout(request)
+    return redirect('/')

@@ -1,3 +1,6 @@
+// Autor: Lorenzo
+// Function that sends a POST request to add a friend to the user's friend list
+
 function addFriend(id) {
     fetch(addFriendUrl, {
         method: 'POST',
