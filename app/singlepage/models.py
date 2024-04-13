@@ -5,6 +5,8 @@ from django.core.files.storage import default_storage
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth.signals import user_logged_in, user_logged_out
+
 
 # Create your models here.
 
@@ -15,8 +17,8 @@ class User(AbstractUser):
     total_matches = models.IntegerField(default=0, blank=True)
     win = models.IntegerField(default=0, blank=True)
     lose = models.IntegerField(default=0, blank=True)   
-
-
+    is_online = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.usernames
 
@@ -39,6 +41,16 @@ def delete_old_profile_image(sender, instance, **kwargs):
                         default_storage.delete(old_image_path)
         except User.DoesNotExist:
             pass
+
+@receiver(user_logged_in)
+def user_logged_in_callback(sender, request, user, **kwargs):
+    user.is_online = True
+    user.save()
+
+@receiver(user_logged_out)
+def user_logged_out_callback(sender, request, user, **kwargs):
+    user.is_online = False
+    user.save()
 
 class Game(models.Model):
     local = models.BooleanField(default=False)

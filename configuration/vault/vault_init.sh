@@ -61,7 +61,7 @@ else
     echo "Le Secret Engine KV est déjà activé."
 fi
 
-ENV_FILE="../../.env.dev"
+ENV_FILE="../.env.dev"
 
 echo "Vérification de l'existence du fichier .env..."
 if [ ! -f "$ENV_FILE" ]; then
