@@ -42,7 +42,7 @@ searchInput.addEventListener('keydown', (event) => {
                                 <img src="${user.profile_image}" class="rounded-circle" width="100" height="100">
                                 <p class="fw-bold fs-5 text-center">${user.username}</p>
                                 <div class="d-flex justify-content-center items-center">
-                                    <button class="btn btn-primary" id="add-button" onclick="addFriend('${user.id}')" ${disabledAttribute}>${addButtonLabel}</button>
+                                    <button class="btn btn-primary" data-toggle="button" aria-pressed="false" id="add-button" data-user-id="${user.id}" onclick="addFriend('${user.id}')" ${disabledAttribute}>${addButtonLabel}</button>
                                 </div>
                             </div>
                         </div>
