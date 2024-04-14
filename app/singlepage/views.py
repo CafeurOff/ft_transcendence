@@ -7,7 +7,7 @@ from .forms import UsernamesForm, PasswordForm, SignupForm, UpdateUserNameForm, 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
-from singlepage.models import User, Friend
+from singlepage.models import User, Friend, Game
 import time
 import json
 from django.contrib.auth import get_user_model
@@ -172,6 +172,9 @@ def game(request):
     if request.method == 'POST':
         request.user.total_matches += 1
         request.user.save()
+
+        game = Game.objects.create(local=True, tournament=False, ended=False)
+        game.save()
         return JsonResponse({'success': True})
     return render(request, 'game.html')
     
@@ -185,6 +188,9 @@ def gameia(request):
     if request.method == 'POST':
         request.user.total_matches += 1
         request.user.save()
+
+        game = Game.objects.create(local=False, tournament=False, ended=False)
+        game.save()
         return JsonResponse({'success': True})
     return render(request, 'ia.html')
 
