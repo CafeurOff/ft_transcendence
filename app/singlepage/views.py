@@ -212,6 +212,10 @@ def update_score(request):
         user = request.user
         user.win += 1
         user.save()
+
+        winner_id = json.load(request)['winner_id']
+        winner = Game.objects.create(winner_id=winner_id)
+        winner.save()
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})

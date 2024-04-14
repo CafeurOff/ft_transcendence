@@ -38,7 +38,10 @@
                     headers: {
                         'X-CSRFToken': '{{ csrf_token }}',
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({
+                        'winner_uid': '{{ user.id }}'
+                    })
                 }).then(response => {
                     if (response.ok) {
                         console.log('Score updated successfully!');
@@ -59,7 +62,10 @@
                     headers: {
                         'X-CSRFToken': '{{ csrf_token }}',
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({
+                        'winner_uid': '0'
+                    })
                 }).then(response => {
                     if (response.ok) {
                         console.log('Score updated successfully!');
@@ -75,24 +81,6 @@
 
                 drawText("Player 2 wins !", 350, 250, 'red');
             }
-            fetch('{% url 'game' %}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    'winner_uid': '{{ user.id }}'
-                })
-            }).then(response => {
-                if (response.ok) {
-                    console.log('Game ended successfully!');
-                } else {
-                    console.error('Failed to end game!');
-                }
-            }).catch(error => {
-                console.error('Error ending game:', error);
-            }); 
         }
         </script>
         <script src="{% static 'js/pong.js' %}"> </script>
