@@ -38,7 +38,7 @@ searchInput.addEventListener('keydown', (event) => {
                     }
                     usersContainer.innerHTML += `
                         <div class="col d-flex justify-content-center">
-                            <div class="user-card p-3 bg-dark text-white rounded-5">
+                            <div class="user-card p-3 bg-darkdark text-white rounded-5">
                                 <img src="${user.profile_image}" class="rounded-circle" width="100" height="100">
                                 <p class="fw-bold fs-5 text-center">${user.username}</p>
                                 <div class="d-flex justify-content-center items-center">
