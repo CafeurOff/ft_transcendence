@@ -229,7 +229,6 @@ def update_score(request):
 @login_required
 def update_loss(request):
     if request.method == 'POST':
-        # Augmenter le score du joueur 1
         user = request.user
         user.lose += 1
         user.save()

@@ -23,73 +23,15 @@
         </div>
         <script>
             const username = "{{ user.get_username }}";
-            function startGame() {
-                var timeleft = 3;
-                var startTimer = setInterval(function() {
-                    if (timeleft <= 0) {
-                        clearInterval(startTimer);
-                        document.getElementById("countdown").innerHTML = "GO!";
-                        gameStarted = true;
-                        gameLoop();
-                    } else {
-                        document.getElementById("countdown").innerHTML = timeleft;
-                    }
-                    timeleft -= 1;
-                }, 1000);
-            }
-            //startGame();
-            function endGame() {
-            if (player1Score === 5) {
-                fetch('{% url 'update_score' %}', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        'winner_uid': '{{ user.id }}'
-                    })
-                }).then(response => {
-                    if (response.ok) {
-                        console.log('Score updated successfully!');
-                        setTimeout(() => {
-                            window.location.href = '{% url 'gamepage' %}';
-                        }, 2000);
-                    } else {
-                        console.error('Failed to update score!');
-                    }
-                }).catch(error => {
-                    console.error('Error updating score:', error);
-                });
-
-                drawText(username + " wins !", 350, 250, 'red');
-            } else {
-                fetch('{% url 'update_loss' %}', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        'winner_uid': '0'
-                    })
-                }).then(response => {
-                    if (response.ok) {
-                        console.log('Score updated successfully!');
-                        setTimeout(() => {
-                            window.location.href = '{% url 'gamepage' %}';
-                        }, 2000);
-                    } else {
-                        console.error('Failed to update score!');
-                    }
-                }).catch(error => {
-                    console.error('Error updating score:', error);
-                });
-
-                drawText("Player 2 wins !", 350, 250, 'red');
-            }
-        }
+            const userId = "{{ user.id }}";
+            const gameUrl = "{% url 'game' %}";
+            const gameiaUrl = "{% url 'gameia' %}";
+            const gamepageUrl = "{% url 'gamepage' %}";
+            const csrfToken = "{{ csrf_token }}";
+            const updateScoreUrl = "{% url 'update_score' %}";
+            const updateLoseUrl = "{% url 'update_loss' %}";
         </script>
+        <script src="{% static 'js/endGame.js' %}"> </script>
         <script src="{% static 'js/pong.js' %}"> </script>
     </body>
 </html>

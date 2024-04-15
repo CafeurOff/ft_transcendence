@@ -9,7 +9,7 @@ const paddleWidth = 10;
 const paddleHeight = 100;
 const paddleSpeed = 2;
 const ballRadius = 10;
-const initialBallSpeed = 3.5;
+const initialBallSpeed = 1.5; // Update speed when in pc screen
 const maxBallSpeed = 4;
 const keyState = {};
 
