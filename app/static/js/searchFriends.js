@@ -37,7 +37,7 @@ searchInput.addEventListener('keydown', (event) => {
                         disabledAttribute = "disabled";
                     }
                     usersContainer.innerHTML += `
-                        <div class="col-4 d-flex justify-content-center">
+                        <div class="col d-flex justify-content-center">
                             <div class="user-card p-3 bg-dark text-white rounded-5">
                                 <img src="${user.profile_image}" class="rounded-circle" width="100" height="100">
                                 <p class="fw-bold fs-5 text-center">${user.username}</p>

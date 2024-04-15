@@ -189,7 +189,7 @@ def gameia(request):
         request.user.total_matches += 1
         request.user.save()
 
-        game = Game.objects.create(local=False, tournament=False, ended=False)
+        game = Game.objects.create(local=True, tournament=False, ended=False)
         game.save()
         return JsonResponse({'success': True})
     return render(request, 'ia.html')
@@ -208,14 +208,16 @@ def gameia(request):
 @login_required
 def update_score(request):
     if request.method == 'POST':
-        # Augmenter le score du joueur 1
         user = request.user
         user.win += 1
         user.save()
 
-        winner_id = json.load(request)['winner_id']
-        winner = Game.objects.create(winner_id=winner_id)
-        winner.save()
+        winner_uid = json.load(request)['winner_uid']
+        game = Game.objects.last()
+        if game is not None:
+            game.ended = True
+            game.winner_uid_id = winner_uid
+            game.save()
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})
@@ -231,6 +233,11 @@ def update_loss(request):
         user = request.user
         user.lose += 1
         user.save()
+
+        game = Game.objects.last()
+        if game is not None:
+            game.ended = True
+            game.save()
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})
@@ -281,6 +288,7 @@ def add_friends(request):
         from_to = request.user.id
         to_id = id
         friend_request, created = Friend.objects.get_or_create(user1_uid_id=from_to, user2_uid_id=to_id)
+        firend_request, created = Friend.objects.get_or_create(user1_uid_id=to_id, user2_uid_id=from_to)
         if created:
             return JsonResponse({'friend_request': True})
         else:
