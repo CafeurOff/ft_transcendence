@@ -209,7 +209,7 @@ function resetBall() {
     ballY = canvas.height / 2;
     ballSpeedX = initialBallSpeed;
     ballSpeedY = initialBallSpeed;
-    //chooseRandomDirection(ballX, ballY);
+    chooseRandomDirection(ballX, ballY);
 }
 
 function resetPaddles() {
