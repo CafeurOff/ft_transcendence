@@ -1,5 +1,7 @@
 'use strict';
 
+// Push 
+
 const canvas = document.querySelector("#pongCanvas");
 const ctx = canvas.getContext('2d');
 
@@ -74,14 +76,82 @@ function draw() {
 function getRandomNumber(min, max) {
     return Math.random() * (max - min) + min;
 }
+// Fonction pour la direction vers le haut à gauche
+function startTopLeft(ballX, ballY) {
+    if (Math.random() < 0.5)
+    {
+        ballSpeedX = -1 * initialBallSpeed;
+        ballSpeedY = -1 * initialBallSpeed;
+    }
+    else
+    {
+        ballSpeedX = -1 * initialBallSpeed;
+        ballSpeedY = -1.4 * initialBallSpeed;
+    }
+}
+
+// Fonction pour la direction vers le haut à droite
+function startTopRight(ballX, ballY) {
+    if (Math.random() < 0.5)
+    {
+        ballSpeedX = 1 * initialBallSpeed;
+        ballSpeedY = -1 * initialBallSpeed;
+    }
+    else
+    {
+        ballSpeedX = 1 * initialBallSpeed;
+        ballSpeedY = -0.5 * initialBallSpeed;
+    }
+}
+
+// Fonction pour la direction vers le bas à gauche
+function startBottomLeft(ballX, ballY) {
+    if (Math.random() < 0.5)
+    {
+        ballSpeedX = -1 * initialBallSpeed;
+        ballSpeedY = 1 * initialBallSpeed;
+    }
+    else
+    {
+        ballSpeedX = -1 * initialBallSpeed;
+        ballSpeedY = 1.4 * initialBallSpeed;
+    }
+}
+
+// Fonction pour la direction vers le bas à droite
+function startBottomRight(ballX, ballY) {
+    if (Math.random() < 0.5)
+    {
+        ballSpeedX = 1 * initialBallSpeed;
+        ballSpeedY = 1 * initialBallSpeed; 
+    }
+    else
+    {
+        ballSpeedX = 1 * initialBallSpeed;
+        ballSpeedY = 1.4 * initialBallSpeed;
+    }
+}
+
+// Choisir une direction de manière aléatoire
+function chooseRandomDirection(ballX, ballY) {
+    const directions = [
+        startTopLeft,
+        startTopRight,
+        startBottomLeft,
+        startBottomRight
+    ];
+    const randomIndex = Math.floor(Math.random() * directions.length);
+    const randomDirectionFunction = directions[randomIndex];
+    randomDirectionFunction(ballX, ballY);
+}
 
 function update() {
     // Faire bouger la balle
-    if (ballSpeedX < maxBallSpeed && ballSpeedY < maxBallSpeed)
-    {
+    //if (ballSpeedX < maxBallSpeed && ballSpeedY < maxBallSpeed)
+    //{
         ballX += ballSpeedX;
         ballY += ballSpeedY;
-    }
+    //}
 
     // Envoyer la balle dans l'autre sens si elle touche le haut ou le bas
     if ((ballY + ballRadius >= canvas.height || ballY - ballRadius <= 0)) {
@@ -119,9 +189,17 @@ function update() {
     if (Math.abs(ballSpeedX) < maxBallSpeed) {
         ballSpeedX += ballSpeedX > 0 ? 0.0001 : -0.0001;
     }
+    else
+    {
+        ballSpeedX = maxBallSpeed;
+    }
 
     if (Math.abs(ballSpeedY) < maxBallSpeed) {
         ballSpeedY += ballSpeedY > 0 ? 0.0001 : -0.0001;
+    }
+    else
+    {
+        ballSpeedY = maxBallSpeed;
     }
 }
 
@@ -131,6 +209,7 @@ function resetBall() {
     ballY = canvas.height / 2;
     ballSpeedX = initialBallSpeed;
     ballSpeedY = initialBallSpeed;
+    chooseRandomDirection(ballX, ballY);
 }
 
 function resetPaddles() {
@@ -162,8 +241,8 @@ function handleKeyPress() {
 
 // Boucle sur le jeu 
 function gameLoop() {
-    if (gameStarted)
-    {
+    //if (gameStarted)
+    //{
         update();
         draw();
         handleKeyPress()
@@ -172,10 +251,9 @@ function gameLoop() {
         } else {
             endGame();
         }
-    }
+    //}
 }
 
 document.addEventListener('keydown', handleKeydown);
 document.addEventListener('keyup', handleKeyup);
-//gameLoop();
-
+gameLoop();
