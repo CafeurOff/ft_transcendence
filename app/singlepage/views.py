@@ -11,6 +11,7 @@ from singlepage.models import User, Friend, Game
 import time
 import json
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 
 ############################################################################################################
@@ -133,11 +134,23 @@ def profile(request):
     total_matches = request.user.total_matches
     win = request.user.win
     lose = request.user.lose
-    if total_matches == 0:
-        win_rate = 0
-    else:
-        win_rate = round((win / total_matches) * 100, 2)
-    return render(request, 'profile.html', {'total_matches': total_matches, 'win': win, 'lose': lose, 'win_rate': win_rate})
+    
+    matches = Game.objects.filter(ended=True).filter(player_uid=request.user.id)
+    win_matches = matches.filter(winner_uid=request.user.id)
+    lose_matches = matches.exclude(winner_uid=request.user.id)
+
+    matches_with_date = [(match, timezone.localtime(match.created_at)) for match in matches]
+
+    # Tri de la liste par date de création
+    matches_with_date.sort(key=lambda x: x[1])
+
+    data = {
+        'matches_with_date': matches_with_date,  # Liste de tuples (match, created_at)
+        'win_matches': win_matches.count(),
+        'lose_matches': lose_matches.count(),
+    }
+    return render(request, 'profile.html', {'total_matches': total_matches, 'win': win, 'lose': lose, 'data': data})
+
 
 # View Friends page : localhost:8000/friends/
 # This view displays the friends page of the application
@@ -173,7 +186,7 @@ def game(request):
         request.user.total_matches += 1
         request.user.save()
 
-        game = Game.objects.create(local=True, tournament=False, ended=False)
+        game = Game.objects.create(local=True, tournament=False, ended=False, player_uid_id=request.user.id)
         game.save()
         return JsonResponse({'success': True})
     return render(request, 'game.html')
@@ -191,7 +204,7 @@ def gameia(request):
         level = json.load(request)['level']
         request.session['level'] = level 
                 
-        game = Game.objects.create(local=True, tournament=False, ended=False)
+        game = Game.objects.create(local=True, tournament=False, ended=False, player_uid_id=request.user.id)
         game.save()
         return JsonResponse({'success': True})
     else:

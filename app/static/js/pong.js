@@ -246,9 +246,7 @@ function gameLoop() {
     draw();
     handleKeyPress()
     if (player1Score < 5 && player2Score < 5) {
-        setInterval(() => {
             requestAnimationFrame(gameLoop);
-        }, 1000 / 60);
     } else {
         endGame();
     }

@@ -57,6 +57,31 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-12 col-md-15">
+                    <div class="info-box mb-5">
+                        <div class="mb-3">
+                            <p for="username" class="form-label text-white fw-bold fs-4">Historique des matchs</p>
+                            <p class="form-label text-secondary fw-lighter fs-6">Liste des matchs joués</p>
+                            <div class="mb-2">
+                                <ul class="text-white fs-5 fw-lighter">
+                                    {% for match_with_date in data.matches_with_date %}
+                                        <li>
+                                            {{ match_with_date.1|date:"d/m H:i" }} | 
+                                            {% if forloop.counter <= data.win_matches %}
+                                                <span class="text-success">Match <span class="fw-bold">gagné</span></span>
+                                            {% else %}
+                                                <span class="text-danger">Match <span class="fw-bold">perdu</span></span>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
             </div>
         </div>
     </body>
