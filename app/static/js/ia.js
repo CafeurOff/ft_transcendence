@@ -276,15 +276,7 @@ function gameLoop() {
     }
 }
 
-// Afficher qui a gagné
-function endGame() {
-    if (player1Score === 5) {
-        drawText("You win !", 350, 250, 'red');
-    } else {
-        drawText("IA wins !", 350, 250, 'red');
-    }
-    
-}
+
 
 document.addEventListener('keydown', handleKeydown);
 document.addEventListener('keyup', handleKeyup);
