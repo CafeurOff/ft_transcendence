@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
 # Grafana for monitoring and visualization of data
   grafana:
