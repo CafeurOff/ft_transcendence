@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.information-container {
+    border-radius: 7px;
+    background: #242222;
+}
+
+.tournaments-container .btn-custom {
+    background: #165829;
+    color: white;
+    border: none;
+}
+
+.tournaments-container .btn-custom:hover {
+    background: #0e3a1b;
+    color: white;
+}

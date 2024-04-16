@@ -36,6 +36,7 @@ urlpatterns = [
     path('friends/', views.friends, name='friends'), # Friends page localhost:8000/friends
     path('gamepage/', views.gamepage, name='gamepage'), # Game page localhost:8000/gamepage
     path('settings/', views.settings, name='settings'), # Settings page localhost:8000/settings
+    path('tournaments/', views.tournaments, name='tournaments'), # Tournament page localhost:8000/tournament
     # Handler
     path('404/', views.handler404, name='404'), # 404 page localhost:8000/404
     # API endpoints

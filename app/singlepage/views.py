@@ -152,6 +152,19 @@ def profile(request):
     return render(request, 'profile.html', {'total_matches': total_matches, 'win': win, 'lose': lose, 'data': data})
 
 
+# Tournament page : localhost:8000/tournament/
+# This view displays the tournament page of the application
+# It displays the tournament page with the user's profile picture, username, and a game
+# If the user is not authenticated, it redirects to the index page
+
+@login_required
+def tournaments(request):
+    if request.user.is_authenticated:
+        return render(request, 'tournaments.html')
+    else:
+        message = 'Vous devez être connecté pour accéder à cette page'
+        return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
+
 # View Friends page : localhost:8000/friends/
 # This view displays the friends page of the application
 # It displays a list of all users in the database
