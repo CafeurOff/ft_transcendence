@@ -31,7 +31,7 @@
                 <div class="container">
                     <div class="row gap-5 justify-content-center">
                         <div class="col-md-4">
-                            <div class="bg-gamecard rounded-2 pb-10" onclick="launchGame('{% url 'game' %}', '/game')">
+                            <div class="bg-gamecard rounded-2 pb-10" onclick="launchGame('{% url 'game' %}', '/game', 0)">
                                 <img src="{% static 'images/local.png' %}" alt="Local game" class="img-fluid">
 
                                 <div class="mt-3">
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="bg-gamecard rounded-2 pb-10" onclick="launchGame('{% url 'gameia' %}', '/game/ia')">
+                            <div class="bg-gamecard rounded-2 pb-10" data-bs-toggle="modal" data-bs-target="#levelModal">
                                 <img src="{% static 'images/ia.png' %}" alt="Online game" class="img-fluid">
 
                                 <div class="mt-3">
@@ -51,8 +51,33 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
+                    <!-- Modal -->
+                    <div class="modal fade" id="levelModal" tabindex="-1" aria-labelledby="levelModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content bg-darker">
+                            <div class="modal-header">
+                              <h5 class="modal-title text-white f" id="levelModalLabel">Choisir le niveau</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                              <p class="text-white">Choisissez le niveau de difficulté de l'IA</p>
+                                <div class="d-grid gap-2 d-md-block">
+                                    <button class="btn btn-primary" id="easy">Facile</button>
+                                    <button class="btn btn-primary" id="medium">Moyen</button>
+                                    <button class="btn btn-primary" id="hard">Difficile</button>
+                                </div>
+                            </div>
+                            
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary custom-btn custom-btn-width">Jouer</button>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    
+                </div>
             </div>     
         </div>   
     </div>
@@ -60,14 +85,16 @@
 
 </body>
 <script>
-    function launchGame(url, redirectUrl) {
+    function launchGame(url, redirectUrl, level) {
         fetch(url, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({})
+            body: JSON.stringify({
+                level: level
+            })
         }).then(response => {
             if (response.ok) {
                 console.log('Match launched successfully!');
@@ -80,4 +107,32 @@
         });
     }
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('#levelModal .modal-body button');
+        let selectedLevel = '';
+
+        buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                if (selectedLevel !== this.id) {
+                    if (selectedLevel) {
+                        document.getElementById(selectedLevel).disabled = false;
+                    }
+                    selectedLevel = this.id;
+                    this.disabled = true;
+                }
+            });
+        });
+
+        document.querySelector('#levelModal .modal-footer button').addEventListener('click', function () {
+            if (selectedLevel !== '') {
+                launchGame('{% url 'gameia' %}', '/game/ia', selectedLevel);
+            } else {
+                alert("Veuillez sélectionner un niveau avant de jouer.");
+            }
+        });
+    });
+</script>
+
 </html>

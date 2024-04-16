@@ -240,8 +240,7 @@ function handleKeyPress() {
         player1Y += paddleSpeed;
 }
 
-let difficultylevel = "easy";
-//function for the IA is easy to beat
+let difficultylevel = level;
 function computerMovement() {
 
 	let paddleSpeedIaAdjusted = paddleSpeedIa;

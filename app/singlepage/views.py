@@ -188,11 +188,15 @@ def gameia(request):
     if request.method == 'POST':
         request.user.total_matches += 1
         request.user.save()
-
+        level = json.load(request)['level']
+        request.session['level'] = level 
+                
         game = Game.objects.create(local=True, tournament=False, ended=False)
         game.save()
         return JsonResponse({'success': True})
-    return render(request, 'ia.html')
+    else:
+        level = request.session.get('level', None)
+    return render(request, 'ia.html', {'level': level})
 
 
 ############################################################################################################
