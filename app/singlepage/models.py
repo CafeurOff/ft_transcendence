@@ -83,6 +83,7 @@ def user_logged_out_callback(sender, request, user, **kwargs):
 ############################################################################################################
 
 class Game(models.Model):
+    player_uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player', null=True)
     local = models.BooleanField(default=False)
     tournament = models.BooleanField(default=False)
     ended = models.BooleanField(default=False)
