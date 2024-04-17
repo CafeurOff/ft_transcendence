@@ -233,9 +233,9 @@ function handleKeyPress() {
         player2Y -= paddleSpeed;
     if (keyState["ArrowDown"] && player2Y < canvas.height - paddleHeight)
         player2Y += paddleSpeed;
-    if (keyState["z"] && player1Y > 0)
+    if ((keyState["z"] || keyState["Z"]) && player1Y > 0)
         player1Y -= paddleSpeed;
-    if (keyState["s"] && player1Y < canvas.height - paddleHeight)
+    if ((keyState["s"] || keyState["S"]) && player1Y < canvas.height - paddleHeight)
         player1Y += paddleSpeed;
 }
 
