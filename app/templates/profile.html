@@ -81,7 +81,33 @@
                     </div>
                 </div>
                 
+                <div id="chart-container" class="mx-5 mt-5">
+                    <rect x="0" y="0" width="100%" height="200" stroke="none" stroke-width="0" fill="#242222"></rect>
+                </div>
 
+                <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                <script type="text/javascript">
+                    google.charts.load('current', {'packages':['corechart']});
+                    google.charts.setOnLoadCallback(drawChart);
+                    function drawChart() {
+                        var data = google.visualization.arrayToDataTable([
+                            ['Statistiques', 'Pourcentage'],
+                            ['Victoires', {{ win }}],
+                            ['Défaites', {{ lose }}]
+                        ]);
+        
+                        var options = {
+                            backgroundColor : '#1C1B1B',
+                            title: 'Répartition des victoires et des défaites',
+                            pieHole: 0.4,
+                            colors: ['#4CAF50', '#F44336'] 
+                        };
+        
+                        var chart = new google.visualization.PieChart(document.getElementById('chart-container'));
+        
+                        chart.draw(data, options);
+                    }
+                </script>
             </div>
         </div>
     </body>

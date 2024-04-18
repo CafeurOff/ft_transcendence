@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.signals import user_logged_in, user_logged_out
-
+from django.contrib.postgres.fields import ArrayField
 
 # Model is a class that represents a table in the database and where every attribute of the class is a field of the table
 
@@ -124,10 +124,10 @@ class Friend(models.Model):
 
 class Tournament(models.Model):
     owner_uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
-    username_virtual_player = models.arrayField(models.CharField(max_length=100), blank=True)
+    username_virtual_player = ArrayField(models.CharField(max_length=100, blank=True), default=list, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     state = models.BooleanField(default=False)
-    winner_uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='winner', null=True)
+    winner_uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tournament_winner', null=True)
     number_of_players = models.IntegerField(default=0, blank=True)
     number_of_rounds = models.IntegerField(default=0, blank=True)
     current_round = models.IntegerField(default=0, blank=True)
