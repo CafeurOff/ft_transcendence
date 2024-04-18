@@ -130,8 +130,4 @@ class Tournament(models.Model):
     winner_uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tournament_winner', null=True)
     number_of_players = models.IntegerField(default=0, blank=True)
     number_of_rounds = models.IntegerField(default=0, blank=True)
-    current_round = models.IntegerField(default=0, blank=True)
-    current_match = models.IntegerField(default=0, blank=True)
-    current_player = models.IntegerField(default=0, blank=True)
-    current_virtual_player = models.IntegerField(default=0, blank=True)
     
