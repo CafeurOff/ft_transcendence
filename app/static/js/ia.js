@@ -5,25 +5,35 @@ const ctx = canvas.getContext('2d');
 
 const paddleWidth = 10;
 const paddleHeight = 100;
-const paddleSpeed = 2;
-const paddleSpeedIa = 2;
-const ballRadius = 10;
-const initialBallSpeed = 1.5;
-const maxBallSpeed = 4;
+const paddleSpeed = 4;
+const initialBallSpeed = 4;
+const maxBallSpeed = 6;
 const keyState = {};
 
-let IaSpeed = 0;
-let IaPrecision = 0;
+
 let player1Score = 0;
 let computerScore = 0;
-let ballSpeedX = initialBallSpeed;
-let ballSpeedY = initialBallSpeed;
+
 
 let player1Y = canvas.height / 2 - paddleHeight / 2;
-let computerY = canvas.height / 2 - paddleHeight / 2;
-//let computerCentreY = computerY + paddleHeight / 2;
-let ballX = canvas.width / 2;
-let ballY = canvas.height / 2;
+let player1X = canvas.width;
+
+const ball = {
+    x: canvas.height / 2, 
+    y: canvas.height/2,
+    radius: 10, 
+    speed: 4, 
+    dx: 4, 
+    dy: 4
+}
+
+const aiPaddle = {
+    x: canvas.width / 2,
+    y: canvas.height / 2,
+    width: 10,
+    height: 100,
+    dy: 4,
+};
 
 //Fonction pour dessiner des rectangles
 function drawRect(x, y, width, height, color) {
@@ -61,17 +71,19 @@ function draw() {
 
     // Dessiner les deux joueurs
     drawRect(0, player1Y, paddleWidth, paddleHeight, 'white');
-    drawRect(canvas.width - paddleWidth, computerY, paddleWidth, paddleHeight, 'white');
+    drawRect(canvas.width - paddleWidth, aiPaddle.y, paddleWidth, paddleHeight, 'white');
 
     //Dessiner la ligne du milieu
     drawLine();
 
     // Dessiner la balle
-    drawCircle(ballX, ballY, ballRadius, 'white');
+    drawCircle(ball.x, ball.y, ball.radius, 'white');
 
     // Ecrire les scores
     drawText(player1Score, canvas.width / 4, 50, 'white');
     drawText(computerScore, 3 * canvas.width / 4, 50, 'white');
+
+    moveBall();
 }
 
 function getRandomNumber(min, max) {
@@ -82,13 +94,13 @@ function getRandomNumber(min, max) {
 function startTopLeft(ballX, ballY) {
     if (Math.random() < 0.5)
     {
-        ballSpeedX = -1 * initialBallSpeed;
-        ballSpeedY = -1 * initialBallSpeed;
+        ball.dx = -1 * initialBallSpeed;
+        ball.dy = -1 * initialBallSpeed;
     }
     else
     {
-        ballSpeedX = -1 * initialBallSpeed;
-        ballSpeedY = -1.4 * initialBallSpeed;
+        ball.dx = -1 * initialBallSpeed;
+        ball.dy = -1.4 * initialBallSpeed;
     }
 }
 
@@ -96,13 +108,13 @@ function startTopLeft(ballX, ballY) {
 function startTopRight(ballX, ballY) {
     if (Math.random() < 0.5)
     {
-        ballSpeedX = 1 * initialBallSpeed;
-        ballSpeedY = -1 * initialBallSpeed;
+        ball.dx = 1 * initialBallSpeed;
+        ball.dy = -1 * initialBallSpeed;
     }
     else
     {
-        ballSpeedX = 1 * initialBallSpeed;
-        ballSpeedY = -0.5 * initialBallSpeed;
+        ball.dx = 1 * initialBallSpeed;
+        ball.dy = -0.5 * initialBallSpeed;
     }
 }
 
@@ -110,13 +122,13 @@ function startTopRight(ballX, ballY) {
 function startBottomLeft(ballX, ballY) {
     if (Math.random() < 0.5)
     {
-        ballSpeedX = -1 * initialBallSpeed;
-        ballSpeedY = 1 * initialBallSpeed;
+        ball.dx = -1 * initialBallSpeed;
+        ball.dy = 1 * initialBallSpeed;
     }
     else
     {
-        ballSpeedX = -1 * initialBallSpeed;
-        ballSpeedY = 1.4 * initialBallSpeed;
+        ball.dx = -1 * initialBallSpeed;
+        ball.dy = 1.4 * initialBallSpeed;
     }
 }
 
@@ -124,13 +136,13 @@ function startBottomLeft(ballX, ballY) {
 function startBottomRight(ballX, ballY) {
     if (Math.random() < 0.5)
     {
-        ballSpeedX = 1 * initialBallSpeed;
-        ballSpeedY = 1 * initialBallSpeed; 
+        ball.dx = 1 * initialBallSpeed;
+        ball.dy = 1 * initialBallSpeed; 
     }
     else
     {
-        ballSpeedX = 1 * initialBallSpeed;
-        ballSpeedY = 1.4 * initialBallSpeed;
+        ball.dx = 1 * initialBallSpeed;
+        ball.dy = 1.4 * initialBallSpeed;
     }
 }
 
@@ -142,83 +154,23 @@ function chooseRandomDirection(ballX, ballY) {
         startBottomLeft,
         startBottomRight
     ];
-    console.log("TEST");
     const randomIndex = Math.floor(Math.random() * directions.length);
     const randomDirectionFunction = directions[randomIndex];
     randomDirectionFunction(ballX, ballY);
 }
 
-
-function update() {
-    // Faire bouger la balle
-    //if (ballSpeedX < maxBallSpeed && ballSpeedY < maxBallSpeed)
-    //{
-        ballX += ballSpeedX;
-        ballY += ballSpeedY;
-    //}
-
-    // Envoyer la balle dans l'autre sens si elle touche le haut ou le bas
-    if ((ballY + ballRadius >= canvas.height || ballY - ballRadius <= 0)) {
-        ballSpeedY = -ballSpeedY * getRandomNumber(0.8, 1.2);
-        ballY += ballSpeedY;
-    }
-
-    // Envoyer la balle de l'autre côté si elle touche un joueur
-    else if (ballX - ballRadius < paddleWidth &&
-        ballY + ballRadius > player1Y &&
-        ballY - ballRadius < player1Y + paddleHeight) {
-        ballSpeedX = -ballSpeedX * getRandomNumber(0.8, 1.2); //0,8, 1,2
-        ballX += ballSpeedX;
-    }
-
-    else if (ballX + ballRadius > canvas.width - paddleWidth &&
-        ballY + ballRadius > computerY &&
-        ballY - ballRadius < computerY + paddleHeight) {
-        ballSpeedX = -ballSpeedX * getRandomNumber(0.8, 1.2);
-        ballX += ballSpeedX;
-    }
-
-    // Si la balle est sortie du jeu, remettre la balle au centre
-    if (ballX - ballRadius < 0) {
-        computerScore++;
-        resetBall();
-        resetPaddles();
-    } else if (ballX + ballRadius > canvas.width) {
-        player1Score++;
-        resetBall();
-        resetPaddles();
-    }
-
-    // Augmenter la vitesse de la balle progressivement sur une même manche
-    if (Math.abs(ballSpeedX) < maxBallSpeed) {
-        ballSpeedX += ballSpeedX > 0 ? 0.0001 : -0.0001;
-    }
-	else
-	{
-		ballSpeedX = maxBallSpeed;
-	}
-
-    if (Math.abs(ballSpeedY) < maxBallSpeed) {
-        ballSpeedY += ballSpeedY > 0 ? 0.0001 : -0.0001;
-    }
-	else
-	{
-		ballSpeedY = maxBallSpeed;
-	}
-}
-
 //Replacer la balle au centre
 function resetBall() {
-    ballX = canvas.width / 2;
-    ballY = canvas.height / 2;
-    ballSpeedX = initialBallSpeed;
-    ballSpeedY = initialBallSpeed;
-    chooseRandomDirection(ballX, ballY);
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height / 2;
+    ball.dx = initialBallSpeed;
+    ball.dy = initialBallSpeed;
+    chooseRandomDirection(ball.x, ball.y);
 }
 
 function resetPaddles() {
     player1Y = (canvas.height - paddleHeight) / 2;
-    computerY = (canvas.height - paddleHeight) / 2;
+    aiPaddle.y = (canvas.height - paddleHeight) / 2;
 }
 
 
@@ -240,35 +192,125 @@ function handleKeyPress() {
         player1Y += paddleSpeed;
 }
 
-let difficultylevel = level;
-function computerMovement() {
 
-	let paddleSpeedIaAdjusted = paddleSpeedIa;
+function moveBall() {
+    ball.x += ball.dx;
+    ball.y += ball.dy;
 
-	let precision = 0.5;
-	if (difficultylevel === "easy") {
-		precision = getRandomNumber(0.3, 0.6);
-	}
-	else if (difficultylevel === "medium") {
-		precision = getRandomNumber(0.6, 0.9);
-	}
-	else if (difficultylevel === "hard") {
-		precision = getRandomNumber(0.9, 1.2);
-	}
 
-	if (ballY > computerY + paddleHeight / 2 && computerY < canvas.height - paddleHeight) {
-		computerY += paddleSpeedIa * precision;
-	} else if (ballY < computerY + paddleHeight / 2 && computerY > 0) {
-		computerY -= paddleSpeedIa * precision;
-	}
+        if ((ball.y + ball.radius >= canvas.height || ball.y - ball.radius <= 0)) {
+            ball.dy = -ball.dy * getRandomNumber(0.8, 1.2);
+            ball.y += ball.dy;
+        }
+    
+        // Envoyer la balle de l'autre côté si elle touche un joueur
+        else if (ball.x - ball.radius < paddleWidth &&
+            ball.y + ball.radius > player1Y &&
+            ball.y - ball.radius < player1Y + paddleHeight) {
+            ball.dx = -ball.dx * getRandomNumber(0.8, 1.2); //0,8, 1,2
+            ball.x += ball.dx;
+            adjustAiTarget();
+        }
+    
+        else if (ball.x + ball.radius > canvas.width - paddleWidth &&
+            ball.y + ball.radius > aiPaddle.y &&
+            ball.y - ball.radius < aiPaddle.y + paddleHeight) {
+            ball.dx = -ball.dx * getRandomNumber(0.8, 1.2);
+            ball.x += ball.dx;
+            adjustAiTarget();
+    
+        }
+
+        if (ball.x + ball.radius > canvas.width)
+        {
+            player1Score++;
+            resetBall();
+            resetPaddles();
+        }
+        if (ball.x - ball.radius < 0)
+        {
+            computerScore++;
+            resetBall();
+            resetPaddles();
+        }
+
+
+        if (Math.abs(ball.dx) < maxBallSpeed) {
+            ball.dx += ball.dx > 0 ? 0.001 : -0.001;
+        }
+        else
+        {
+            ball.dx = maxBallSpeed;
+        }
+    
+        if (Math.abs(ball.dy) < maxBallSpeed) {
+            ball.dy += ball.dy > 0 ? 0.001 : -0.001;
+        }
+        else
+        {
+            ball.dy = maxBallSpeed;
+        }
 }
+
+function movePaddle(paddle, y) 
+{
+    paddle.y = y;
+    if (paddle.y < 0) paddle.y = 0;
+    if (paddle.y + paddleHeight > canvas.height) paddle.y = canvas.height - paddleHeight;
+}
+
+let aiTargetY = canvas.height / 2;
+function adjustAiTarget() {
+    if (aiPaddle.y + aiPaddle.height / 2 - ball.y < 10)
+        aiTargetY = aiTargetY + 4;
+    else if (aiPaddle.y + aiPaddle.height / 2 - ball.y > 10)
+        aiTargetY = aiTargetY - 4;
+}
+
+/*function aiLogic_back() {
+    if (ball.dx > 0){
+
+    
+        adjustAiTarget();
+
+        movePaddle(aiPaddle, aiTargetY );
+        /*
+        if (aiPaddle.y + aiPaddle.height / 2 < aiTargetY)
+        {
+            console.log("TEST");
+            movePaddle(aiPaddle, aiPaddle.y + aiPaddle.dy);
+        }
+        else 
+            movePaddle(aiPaddle, aiPaddle.y - aiPaddle.dy);
+        
+    }
+}*/
+
+var lastUpadateAt = null;
+var pY = 100;
+
+
+function aiLogic() {
+    if(lastUpadateAt === null || (Date.now() - lastUpadateAt > 1000))
+    {
+       lastUpadateAt = Date.now();
+        pY = predictY(ball);   
+        console.warn("predictY",pY);
+     }
+        
+    if (aiPaddle.y + aiPaddle.height / 2 - pY < 10)
+        movePaddle(aiPaddle, aiPaddle.y + aiPaddle.dy);
+    else if (aiPaddle.y + aiPaddle.height / 2 + pY > 10)
+        movePaddle(aiPaddle, aiPaddle.y - aiPaddle.dy);    
+}
+
 
 // Boucle sur le jeu 
 function gameLoop() {
-    update();
+    aiLogic();
     draw();
     handleKeyPress();
-	computerMovement();
+
     if (player1Score < 5 && computerScore < 5) {
         requestAnimationFrame(gameLoop);
     } else {
@@ -276,8 +318,35 @@ function gameLoop() {
     }
 }
 
+//Predire la posotion de la balle
+function predictY(ball) {
+    let bx = ball.x 
+    let by = ball.y
 
+    let bdx = ball.dx 
+    let bdy = ball.dy
+    
+    while(1)
+    {
+        bx += bdx;
+        by +=bdy;
+
+        if ((by + ball.radius >= canvas.height || by - ball.radius <= 0)) {
+           bdy = -bdy * getRandomNumber(0.6, 1.4);
+            by +=bdy;
+        }
+        // Envoyer la balle de l'autre côté si elle touche un joueur
+        else if (bx - ball.radius < paddleWidth) {
+            bdx = -bdx * getRandomNumber(0.6, 1.4); //0,8, 1,2
+            bx += bdx;
+        }
+        else if (bx + ball.radius > canvas.width - paddleWidth ) {     
+                return by;
+        }
+    }
+}
 
 document.addEventListener('keydown', handleKeydown);
 document.addEventListener('keyup', handleKeyup);
 gameLoop();
+

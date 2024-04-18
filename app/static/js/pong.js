@@ -1,16 +1,14 @@
 'use strict';
 
-// Push 
-
 const canvas = document.querySelector("#pongCanvas");
 const ctx = canvas.getContext('2d');
 
 const paddleWidth = 10;
 const paddleHeight = 100;
-const paddleSpeed = 2;
+const paddleSpeed = 4;
 const ballRadius = 10;
-const initialBallSpeed = 1.5; // Update speed when in pc screen
-const maxBallSpeed = 4;
+const initialBallSpeed = 3; // Update speed when in pc screen
+const maxBallSpeed = 10;
 const keyState = {};
 
 
@@ -147,11 +145,8 @@ function chooseRandomDirection(ballX, ballY) {
 
 function update() {
     // Faire bouger la balle
-    //if (ballSpeedX < maxBallSpeed && ballSpeedY < maxBallSpeed)
-    //{
         ballX += ballSpeedX;
         ballY += ballSpeedY;
-    //}
 
     // Envoyer la balle dans l'autre sens si elle touche le haut ou le bas
     if ((ballY + ballRadius >= canvas.height || ballY - ballRadius <= 0)) {
@@ -187,7 +182,7 @@ function update() {
 
     // Augmenter la vitesse de la balle progressivement sur une même manche
     if (Math.abs(ballSpeedX) < maxBallSpeed) {
-        ballSpeedX += ballSpeedX > 0 ? 0.0001 : -0.0001;
+        ballSpeedX += ballSpeedX > 0 ? 0.001 : -0.001;
     }
     else
     {
@@ -195,7 +190,7 @@ function update() {
     }
 
     if (Math.abs(ballSpeedY) < maxBallSpeed) {
-        ballSpeedY += ballSpeedY > 0 ? 0.0001 : -0.0001;
+        ballSpeedY += ballSpeedY > 0 ? 0.001 : -0.001;
     }
     else
     {
