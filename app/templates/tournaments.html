@@ -28,11 +28,35 @@
                 <div class="tournaments-list-header">
                     <p class="fw-bold fs-4 mb-0 text-white">Listes des tournois</p>
                     <div class="d-flex justify-content-end">
-                        <button class="btn btn-primary btn-custom" id="create-tournament">Créer un tournoi</button>
+                        <button class="btn btn-primary btn-custom" id="create-tournament" data-bs-toggle="modal" data-bs-target="#tournaments">Créer un tournoi</button>
                 </div>
             </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="tournaments" tabindex="-1" aria-labelledby="tournamentsModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-white" id="tournamentsModalLabel">Créer un tournoi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p class="text-white">Choisissez le niveau de difficulté de l'IA</p>
+                        <div class="d-grid gap-2 d-md-block">
+                            <button class="btn btn-primary" id="easy">Facile</button>
+                            <button class="btn btn-primary" id="medium">Moyen</button>
+                            <button class="btn btn-primary" id="hard">Difficile</button>
+                        </div>
+                    </div>
+                
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary custom-btn custom-btn-width">Jouer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </body>
 </html>

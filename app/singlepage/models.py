@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.signals import user_logged_in, user_logged_out
-
+from django.contrib.postgres.fields import ArrayField
 
 # Model is a class that represents a table in the database and where every attribute of the class is a field of the table
 
@@ -104,3 +104,34 @@ class Friend(models.Model):
     user1_uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user1')
     user2_uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user2')
     created_at = models.DateTimeField(auto_now_add=True)
+
+############################################################################################################
+# Tournament model
+# This model represents the tournament table in the database
+# It has the following fields:
+# - owner_uid: a foreign key field that stores the user who created the tournament
+# - username_virutal_player: a char array field that stores the username of the virtual players
+# - created_at: a datetime field that stores the date and time when the tournament was created
+# - state : a char array field that stores the state of the tournament
+# - winner_uid: a foreign key field that stores the user who won the tournament
+# - number_of_players: an integer field that stores the number of players in the tournament
+# - number_of_rounds: an integer field that stores the number of rounds in the tournament
+# - current_round: an integer field that stores the current round of the tournament
+# - current_match: an integer field that stores the current match of the tournament
+# - current_player: an integer field that stores the current player of the tournament
+# - current_virtual_player: an integer field that stores the current virtual player of the tournament
+############################################################################################################
+
+class Tournament(models.Model):
+    owner_uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
+    username_virtual_player = ArrayField(models.CharField(max_length=100, blank=True), default=list, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    state = models.BooleanField(default=False)
+    winner_uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tournament_winner', null=True)
+    number_of_players = models.IntegerField(default=0, blank=True)
+    number_of_rounds = models.IntegerField(default=0, blank=True)
+    current_round = models.IntegerField(default=0, blank=True)
+    current_match = models.IntegerField(default=0, blank=True)
+    current_player = models.IntegerField(default=0, blank=True)
+    current_virtual_player = models.IntegerField(default=0, blank=True)
+    
