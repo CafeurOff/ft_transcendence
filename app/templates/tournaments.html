@@ -42,7 +42,7 @@
                             <p for="username" class="form-label text-white fw-lighter fs-4">Tournois de <span class="fw-bold">{{ tournament.owner_name }}</span></p>
                             <p class="form-label text-secondary fw-lighter fs-6">{{ tournament.number_of_players }} joueurs</p>
                             <div class="mt-3">
-                                <button class="btn btn-primary btn-custom-w custom-btn" onclick="JoinTournament({{ tournament.id }})">Rejoindre</button>
+                                <button class="btn btn-primary btn-custom-w custom-btn" href="">Rejoindre</button> <!-- Rediriger vers la page de gestion via href avec un url de django -->
                         </div>
                     </div>
                 </div>
