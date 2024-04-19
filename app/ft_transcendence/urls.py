@@ -45,6 +45,7 @@ urlpatterns = [
     path('update_score/', views.update_score, name='update_score'), # Update score endpoint for game
     path('update_loss/', views.update_loss, name='update_loss'), # Update loss endpoint for game 
     path('logout/', views.logout_view, name='logout'), # Logout endpoint
+    path('create_tournament/', views.create_tournament, name='create_tournament'), # Create tournament endpoint
     path('', include('django_prometheus.urls')) # Is the localhost:8000/metrics endpoint
 ]
 

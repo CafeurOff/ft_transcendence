@@ -29,34 +29,100 @@
                     <p class="fw-bold fs-4 mb-0 text-white">Listes des tournois</p>
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-primary btn-custom" id="create-tournament" data-bs-toggle="modal" data-bs-target="#tournaments">Créer un tournoi</button>
+                    </div>
                 </div>
             </div>
         </div>
 
+        {% for tournament in tournaments %}
+            <div class="row-auto mt-3 text-left fs-5 fw-medium">
+                <div class="col-auto col-md-3">
+                    <div class="info-box mb-5">
+                        <div class="mb-3">
+                            <p for="username" class="form-label text-white fw-lighter fs-4">Tournois de <span class="fw-bold">{{ tournament.owner_name }}</span></p>
+                            <p class="form-label text-secondary fw-lighter fs-6">{{ tournament.number_of_players }} joueurs</p>
+                            <div class="mt-3">
+                                <button class="btn btn-primary btn-custom-w custom-btn" onclick="JoinTournament({{ tournament.id }})">Rejoindre</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
         <!-- Modal -->
         <div class="modal fade" id="tournaments" tabindex="-1" aria-labelledby="tournamentsModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content bg-dark">
+                <div class="modal-content bg-darker">
                     <div class="modal-header">
                         <h5 class="modal-title text-white" id="tournamentsModalLabel">Créer un tournoi</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
-                        <p class="text-white">Choisissez le niveau de difficulté de l'IA</p>
+                        <p class="text-white text-center">Choissisez les paramètres de votre tournoi</p>
                         <div class="d-grid gap-2 d-md-block">
-                            <button class="btn btn-primary" id="easy">Facile</button>
-                            <button class="btn btn-primary" id="medium">Moyen</button>
-                            <button class="btn btn-primary" id="hard">Difficile</button>
+                            <input type="text" class="form-control custom-input" id="UserEntry" placeholder="Pseudo">
                         </div>
                     </div>
-                
+                    
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary custom-btn custom-btn-width">Jouer</button>
+                        <button type="button" class="btn btn-primary mt-2 custom-btn-width" onclick="AddPlayer()">Ajouter un joueur</button>
+                        <button type="button" class="btn btn-danger mt-2 custom-btn-width" onclick="RemovePlayer()">Retirer un joueur</button>
+                        <button type="button" class="btn btn-primary custom-btn custom-btn-width" onclick="SendInformations()">Créer</button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <script>
+            function AddPlayer() {
+                var input = document.createElement("input");
+                input.type = "text";
+                input.className = "form-control custom-input mt-2";
+                input.placeholder = "Pseudo";
+                document.querySelector(".modal-body").appendChild(input);
+            }
+
+            function RemovePlayer() {
+                var input = document.querySelector(".modal-body").lastElementChild;
+                if (input) {
+                    document.querySelector(".modal-body").removeChild(input);
+                }
+            }
+        </script>
+
+        <script>
+            function SendInformations() {
+                var players = document.querySelectorAll(".custom-input");
+                var playersList = [];
+                players.forEach(player => {
+                    playersList.push(player.value);
+                });
+                if (playersList[0] === "") {
+                    alert("Vous devez renseigner un pseudo !");
+                }
+                if (playersList.length < 2) {
+                    alert("Vous devez avoir au moins 2 joueurs pour créer un tournoi !");
+                    return;
+                } else {
+                    fetch("{% url 'create_tournament' %}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        },
+                        body: JSON.stringify({
+                            players: playersList
+                        })
+
+                    }).then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    })
+                }
+            }
+        </script>
 
     </body>
 </html>

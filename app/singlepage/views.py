@@ -7,7 +7,7 @@ from .forms import UsernamesForm, PasswordForm, SignupForm, UpdateUserNameForm, 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
-from singlepage.models import User, Friend, Game
+from singlepage.models import User, Friend, Game, Tournament
 import time
 import json
 from django.contrib.auth import get_user_model
@@ -160,7 +160,22 @@ def profile(request):
 @login_required
 def tournaments(request):
     if request.user.is_authenticated:
-        return render(request, 'tournaments.html')
+        tournaments = Tournament.objects.filter(owner_uid_id=request.user.id)
+        tournaments = tournaments.filter(state=False)
+        # if user id have already created a tournament and it is not started yet return a message
+        data = []
+        for tournament in tournaments:
+            data.append({
+                'owner_name': request.user.username, 
+                'tournament': tournament,
+                'id': tournament.id,
+                'number_of_players': tournament.number_of_players,
+                'number_of_rounds': tournament.number_of_rounds,
+                'created_at': tournament.created_at,
+                'state': tournament.state,
+                'username_virtual_player': tournament.username_virtual_player,
+            })
+        return render(request, 'tournaments.html', {'tournaments': data})
     else:
         message = 'Vous devez être connecté pour accéder à cette page'
         return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
@@ -322,6 +337,21 @@ def add_friends(request):
             return JsonResponse({'friend_request': True})
         else:
             return JsonResponse({'friend_request': False})
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+
+
+# API endpoint to create a tournament
+# This endpoint is called when the user creates a tournament
+# It creates a new tournament in the database
+
+def create_tournament(request):
+    if request.method == 'POST':
+        playerList = json.load(request)['players']
+        tournament = Tournament.objects.create(owner_uid_id=request.user.id, username_virtual_player=playerList, created_at=timezone.now(), state=False, number_of_players=len(playerList), number_of_rounds=len(playerList) - 1)
+        tournament.save()
+
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})
