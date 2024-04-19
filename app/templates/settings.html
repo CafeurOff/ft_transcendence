@@ -46,9 +46,8 @@
                         <div class="param-box align-self-start mb-5">
                             {% csrf_token %}
                             <div class="mb-3">
-                                <p for="username" class="form-label text-white fw-bold fs-4">Nom d'utilisateur</label>
-                                <br>
-                                <label class="form-label text-secondary fw-lighter fs-6">Modifiez mon nom d’utilisateur</label>
+                                <p for="username" class="form-label text-white fw-bold fs-4">Nom d'utilisateur</p>
+                                <p class="form-label text-secondary fw-lighter fs-6">Modifiez mon nom d’utilisateur</p>
                                 <div class="mb-2">
                                     {{ form.username }}
                                 </div>
@@ -60,9 +59,8 @@
                     <div class="col-12 col-md-6 offset-md-1">
                         <div class="param-box align-self-start mb-5">
                             <div class="mb-3">
-                                <label for="password" class="form-label text-white fw-bold fs-4">Mot de passe</label>
-                                <br>
-                                <label class="form-label text-secondary fw-lighter fs-6">Modifiez mon mot de passe</label>
+                                <p for="password" class="form-label text-white fw-bold fs-4">Mot de passe</p>
+                                <p class="form-label text-secondary fw-lighter fs-6">Modifiez mon mot de passe</p>
                                 <div class="mb-2">
                                     {{ password_form }}
                                 </div>
@@ -76,9 +74,8 @@
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <label for="profile-image" class="form-label text-white fw-bold fs-4">Image de profil</label>
-                                        <br>
-                                        <label class="form-label text-secondary fw-lighter fs-6">Modifiez mon image de profil</label>
+                                        <p for="profile-image" class="form-label text-white fw-bold fs-4">Image de profil</p>
+                                        <p class="form-label text-secondary fw-lighter fs-6">Modifiez mon image de profil</p>
                                     </div>
                                     <img id="profile-image-preview" src="{% if request.user.profile_image %}{{ request.user.profile_image.url }}{% endif %}" alt="profile picture" class="profile-picture rounded-circle" style="width: 64px; height: 64px;">
                                 </div>
