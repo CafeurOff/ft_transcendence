@@ -17,28 +17,3 @@ canvas {
     margin: 5% auto;
     background-color: #171515;
 }
-
-#score-container {
-    position: absolute;
-    bottom: 28%;
-    width: 100%;
-    text-align: center; 
-}
-
-#player1-score {
-    margin: -4% 12% 0 0; 
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1vw;
-    font-weight: bold;
-    display: inline-block; 
-    color: white;
-}
-
-#player2-score {
-    margin: -1% 0 0 12%; 
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1vw;
-    font-weight: bold;
-    display: inline-block; 
-    color: white;
-}

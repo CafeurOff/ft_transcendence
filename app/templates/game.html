@@ -14,13 +14,21 @@
         <div class="mx-5 mt-3">
             <h4 class="title text-white">PINGPONG</h4>
         </div>
-        <div id="countdown" class="text-center text-white mt-3"></div>
         
-        <canvas id="pongCanvas" width="800" height="400"></canvas>
-        <div id="score-container">
-            <div id="player1-score">0</div>
-            <div id="player2-score">0</div>
+        <div class="mx-5 text-center">
+            <div class="game-container embed-responsive embed-responsive-16by9">
+                <canvas id="pongCanvas" class="embed-responsive-item" width="800" height="400"></canvas>
+            </div>
         </div>
+        
+        
+        <div class="text-center">
+            <h4 class="title text-white">SCORE</h4>
+            <div class="score">
+                <span id="player1-score" class="text-white fw-bold">0</span> <span class="text-white">-</span> <span id="player2-score" class="text-white fw-bold">0</span>
+            </div>
+        </div>
+
         <script>
             const username = "{{ user.get_username }}";
             const userId = "{{ user.id }}";
@@ -31,6 +39,8 @@
             const updateScoreUrl = "{% url 'update_score' %}";
             const updateLoseUrl = "{% url 'update_loss' %}";
         </script>
+
+
         <script src="{% static 'js/endGame.js' %}"> </script>
         <script src="{% static 'js/pong.js' %}"> </script>
     </body>

@@ -80,8 +80,8 @@ function draw() {
     drawCircle(ball.x, ball.y, ball.radius, 'white');
 
     // Ecrire les scores
-    drawText(player1Score, canvas.width / 4, 50, 'white');
-    drawText(computerScore, 3 * canvas.width / 4, 50, 'white');
+    document.getElementById("player1-score").textContent = player1Score;
+    document.getElementById("player2-score").textContent = computerScore;
 
     moveBall();
 }
