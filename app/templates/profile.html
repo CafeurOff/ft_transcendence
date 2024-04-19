@@ -14,7 +14,6 @@
         <title>Transcendence</title>
     </head>
     <body class="w-100">
-        
         <div class="mx-5 mt-3">
             <h4 class="text-white">PINGPONG</h4>
         
@@ -80,35 +79,45 @@
                         </div>
                     </div>
                 </div>
-                
-                <div id="chart-container" class="mx-5 mt-5">
-                    <rect x="0" y="0" width="100%" height="200" stroke="none" stroke-width="0" fill="#242222"></rect>
-                </div>
 
-                <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-                <script type="text/javascript">
-                    google.charts.load('current', {'packages':['corechart']});
-                    google.charts.setOnLoadCallback(drawChart);
-                    function drawChart() {
-                        var data = google.visualization.arrayToDataTable([
-                            ['Statistiques', 'Pourcentage'],
-                            ['Victoires', {{ win }}],
-                            ['Défaites', {{ lose }}]
-                        ]);
-        
-                        var options = {
-                            backgroundColor : '#1C1B1B',
-                            title: 'Répartition des victoires et des défaites',
-                            pieHole: 0.4,
-                            colors: ['#4CAF50', '#F44336'] 
-                        };
-        
-                        var chart = new google.visualization.PieChart(document.getElementById('chart-container'));
-        
-                        chart.draw(data, options);
-                    }
-                </script>
+                {% if data.win_matches > 0 or data.lose_matches > 0 %}
+                    <div class="col col-md-2 py-1">
+                        <div class="info-box mb-5">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </div>
+                {% endif %}
+
             </div>
         </div>
+
+        <script>
+            var colors = ['#007bff','#333333'];
+
+            var chartsOptions = {
+                cutoutPercentage: 85, 
+                legend: {position:'bottom', padding:5, labels: {pointStyle:'circle', usePointStyle:true}}
+            };
+
+            var chDonutData = {
+                labels: ['Victoires', 'Défaites'],
+                datasets: [
+                    {
+                        backgroundColor: colors.slice(0, 1),
+                        borderWidth: 0,
+                        data: [{{ data.win_matches }}, {{ data.lose_matches }}]
+                    }
+                ]
+            };
+
+            var chDonut = document.getElementById("myChart");
+            if (chDonut) {
+                new Chart(chDonut, {
+                    type: 'pie',
+                    data: chDonutData,
+                    options: chartsOptions
+                });
+            }
+        </script>
     </body>
 </html>
