@@ -49,6 +49,12 @@
             </div>
         {% endfor %}
 
+        {% if tournaments|length == 0 %}
+            <div class="text-center mt-5">
+                <p class="text-white fs-5 fw-medium">Aucun tournoi n'est disponible pour le moment.</p>
+            </div>
+        {% endif %}
+
         <!-- Modal -->
         <div class="modal fade" id="tournaments" tabindex="-1" aria-labelledby="tournamentsModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -60,9 +66,10 @@
 
                     <div class="modal-body">
                         <p class="text-white text-center">Choissisez les paramètres de votre tournoi</p>
-                        <div class="d-grid gap-2 d-md-block">
+                        <div class="inputs-container">
                             <input type="text" class="form-control custom-input" id="UserEntry" placeholder="Pseudo">
                         </div>
+                        <p id="maxInputMessage" class="text-danger text-center mt-2"></p>
                     </div>
                     
                     <div class="modal-footer">
@@ -76,17 +83,26 @@
 
         <script>
             function AddPlayer() {
-                var input = document.createElement("input");
-                input.type = "text";
-                input.className = "form-control custom-input mt-2";
-                input.placeholder = "Pseudo";
-                document.querySelector(".modal-body").appendChild(input);
-            }
+                var inputsContainer = document.querySelector(".inputs-container");
+                var inputsCount = inputsContainer.querySelectorAll("input").length;
+                var maxInputMessage = document.getElementById("maxInputMessage");
 
+                if (inputsCount < 16) {
+                    var input = document.createElement("input");
+                    input.type = "text";
+                    input.className = "form-control custom-input mt-2";
+                    input.placeholder = "Pseudo";
+                    inputsContainer.appendChild(input);
+                    maxInputMessage.textContent = "";
+                } else {
+                    maxInputMessage.textContent = "Vous avez atteint le nombre maximum de joueurs (16).";
+                }
+            }
             function RemovePlayer() {
-                var input = document.querySelector(".modal-body").lastElementChild;
-                if (input) {
-                    document.querySelector(".modal-body").removeChild(input);
+                var inputsContainer = document.querySelector(".inputs-container");
+                var inputs = inputsContainer.querySelectorAll("input");
+                if (inputs.length > 1) {
+                    inputsContainer.removeChild(inputs[inputs.length - 1]);
                 }
             }
         </script>
@@ -95,32 +111,45 @@
             function SendInformations() {
                 var players = document.querySelectorAll(".custom-input");
                 var playersList = [];
+                var errorMessage = document.getElementById("maxInputMessage");
+                var allFieldsFilled = true;
+
                 players.forEach(player => {
+                    if (player.value === "") {
+                        allFieldsFilled = false;
+                    }
                     playersList.push(player.value);
                 });
-                if (playersList[0] === "") {
-                    alert("Vous devez renseigner un pseudo !");
-                }
-                if (playersList.length < 2) {
-                    alert("Vous devez avoir au moins 2 joueurs pour créer un tournoi !");
-                    return;
-                } else {
-                    fetch("{% url 'create_tournament' %}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRFToken": "{{ csrf_token }}"
-                        },
-                        body: JSON.stringify({
-                            players: playersList
-                        })
 
-                    }).then(response => {
-                        if (response.ok) {
-                            window.location.reload();
-                        }
-                    })
+                if (!allFieldsFilled) {
+                    errorMessage.textContent = "Veuillez remplir tous les champs.";
+                    return;
                 }
+
+                fetch("{% url 'create_tournament' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: JSON.stringify({
+                        players: playersList
+                    })
+                }).then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error("Erreur lors de la création du tournoi.");
+                    }
+                }).then(data => {
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        errorMessage.textContent = data.message;
+                    }
+                }).catch(error => {
+                    errorMessage.textContent = error.message;
+                });
             }
         </script>
 

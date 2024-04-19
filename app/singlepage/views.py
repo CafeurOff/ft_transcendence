@@ -349,12 +349,16 @@ def add_friends(request):
 def create_tournament(request):
     if request.method == 'POST':
         playerList = json.load(request)['players']
+
+        if Tournament.objects.filter(owner_uid_id=request.user.id).filter(state=False).exists():
+            return JsonResponse({'success': False, 'message': 'Vous avez déjà créé un tournoi'})
+        
         tournament = Tournament.objects.create(owner_uid_id=request.user.id, username_virtual_player=playerList, created_at=timezone.now(), state=False, number_of_players=len(playerList), number_of_rounds=len(playerList) - 1)
         tournament.save()
 
         return JsonResponse({'success': True})
     else:
-        return JsonResponse({'success': False})
+        return JsonResponse({'success': False, 'message': 'Une erreur s’est produite'})
 
 # API endpoint to log out the user
 # This endpoint is called when the user logs out
