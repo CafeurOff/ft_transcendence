@@ -180,6 +180,35 @@ def tournaments(request):
         message = 'Vous devez être connecté pour accéder à cette page'
         return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
 
+# Tournament Overview page : localhost:8000/tournament_overview/
+# This view displays the overview of the actual Tournament
+# It displays the tournament page with the user's profile picture, all the players and the actual round
+# If the user is not authenticated, it redirects to the index page
+
+@login_required
+def tournaments_overview(request):
+    if request.user.is_authenticated:
+        tournaments_overview = Tournament.objects.filter(owner_uid_id=request.user.id)
+        tournaments_overview = tournaments_overview.filter(state=False)
+        # if user id have already created a tournament and it is not started yet return a message
+        data = []
+        for tournament in tournaments_overview:
+            data.append({
+                'owner_name': request.user.username, 
+                'tournament': tournament,
+                'id': tournament.id,
+                'number_of_players': tournament.number_of_players,
+                'number_of_rounds': tournament.number_of_rounds,
+                'created_at': tournament.created_at,
+                'state': tournament.state,
+                'username_virtual_player': tournament.username_virtual_player,
+            })
+        return render(request, 'tournaments_overview.html', {'tournaments': data})
+    else:
+        message = 'Vous devez être connecté pour accéder à cette page'
+        return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
+
+
 # View Friends page : localhost:8000/friends/
 # This view displays the friends page of the application
 # It displays a list of all users in the database
