@@ -21,6 +21,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('state', models.BooleanField(default=False)),
                 ('number_of_players', models.IntegerField(blank=True, default=0)),
+                ('number_of_matchs', models.IntegerField(blank=True, default=0)),
                 ('number_of_rounds', models.IntegerField(blank=True, default=0)),
                 ('current_round', models.IntegerField(blank=True, default=0)),
                 ('current_match', models.IntegerField(blank=True, default=0)),

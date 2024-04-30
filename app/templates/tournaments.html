@@ -125,6 +125,10 @@
                     errorMessage.textContent = "Veuillez remplir tous les champs.";
                     return;
                 }
+                if (playersList.length < 2) {
+                    errorMessage.textContent = "Veuillez rajouter plus de joueurs, Joueurs minimum 2.";
+                    return;
+                }
 
                 fetch("{% url 'create_tournament' %}", {
                     method: "POST",
