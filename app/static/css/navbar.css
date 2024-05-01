@@ -51,3 +51,8 @@ body {
 .nav-item .active {
     font-weight: bold !important;
 }
+
+.dropdown-item .active {
+    font-weight: bold !important;
+    background-color: red;
+}
