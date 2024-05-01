@@ -2,52 +2,53 @@
 
 VAULT_ADDR="http://0.0.0.0:8200"
 
-echo "Initialisation de Vault..."
+echo "Initialize Vault... $VAULT_ADDR"
+
+
+# Check if vault is already initialized
 init_output=$(docker exec transcendence-vault-1 vault operator init)
 if [ $? -ne 0 ]; then
-    echo "Erreur lors de l'initialisation de Vault"
+    echo "[ERROR] Vault initialization failed"
     exit 1
 fi
 
 # If vault is already initialized init_output will get the actual status
-echo "Extraction des clés de déverrouillage et du jeton d'accès root..."
+echo "Initiazation unseal keys and root token: $init_output"
 unseal_key_1=$(echo "$init_output" | awk '/Unseal Key 1/ {print $4}')
 unseal_key_2=$(echo "$init_output" | awk '/Unseal Key 2/ {print $4}')
 unseal_key_3=$(echo "$init_output" | awk '/Unseal Key 3/ {print $4}')
 
-echo "Déverrouillage de Vault avec la clé $unseal_key_1..."
+echo "Unseal Key 1: $unseal_key_1"
 docker exec transcendence-vault-1 vault operator unseal $unseal_key_1
 if [ $? -ne 0 ]; then
     echo "Erreur lors du déverrouillage de Vault avec la clé $unseal_key_1"
     exit 1
 fi
 
-echo "Déverrouillage de Vault avec la clé $unseal_key_2..."
+echo "Unseal Key 2: $unseal_key_2"
 docker exec transcendence-vault-1 vault operator unseal $unseal_key_2
 if [ $? -ne 0 ]; then
     echo "Erreur lors du déverrouillage de Vault avec la clé $unseal_key_2"
     exit 1
 fi
 
-echo "Déverrouillage de Vault avec la clé $unseal_key_3..."
+echo "Unseal Key 3: $unseal_key_3"
 docker exec transcendence-vault-1 vault operator unseal $unseal_key_3
 if [ $? -ne 0 ]; then
     echo "Erreur lors du déverrouillage de Vault avec la clé $unseal_key_3"
     exit 1
 fi
 
+# Get root token
 root_token=$(echo "$init_output" | awk '/Initial Root Token/ {print $4}')
-echo "Connexion à Vault avec le jeton d'accès root..."
+echo "Root Token: $root_token"
 docker exec transcendence-vault-1 vault login $root_token
 if [ $? -ne 0 ]; then
-    echo "Erreur lors de la connexion à Vault"
     exit 1
 fi
 
 export VAULT_TOKEN=$root_token
-echo "Root Token: $root_token"
 
-# Activation du Secret Engine KV si nécessaire
 echo "Vérification du Secret Engine KV..."
 kv_enabled=$(docker exec transcendence-vault-1 vault secrets list | grep -E "^kv/")
 if [ -z "$kv_enabled" ]; then
@@ -94,4 +95,7 @@ while IFS='=' read -r key value; do
     fi
 done < "$ENV_FILE"
 
-echo "Tous les secrets ont été enregistrés avec succès."
+echo "All secrets have been saved in Vault."
+# Get the list of secrets
+docker exec transcendence-vault-1 vault kv list kv/data/myapp
+echo "Vault initialization completed successfully."
