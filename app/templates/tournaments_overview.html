@@ -20,7 +20,7 @@
 
         {% for tournaments in tournaments %}
             <div class="information-container p-3 mt-2 text-white">
-                <p class="fw-bold fs-4 mb-2">Tournois de <span class="fw-bold">{{ tournaments.owner_name }}</span></p>
+                <p class="fw-light fs-4 mb-2">Tournois de <span class="fw-bold">{{ tournaments.owner_name }}</span></p>
                 <p class="fw-medium fs-6">Ici vous pouvez rejoindre un tournoi déjà existant ou en créer un vous-même ! Vous pouvez inviter vos amis à des tournois privés ou les ouvrir au public.</p>
             </div>
             <div class="overview row mt-3">
@@ -31,7 +31,9 @@
                         </div>
                         {% for username in tournaments.username_virtual_player %}
                         <div class="information-container mt-3 text-white">
-                            <p class="fw-bold fs-5 mbt-1 ">{{ username }}</p>
+                            <div class="user-card mx-3">
+                                <p class="fw-bold fs mbt-1 ">{{ username }}</p>
+                            </div>
                         </div>
                         {% endfor %}
                     </div>
