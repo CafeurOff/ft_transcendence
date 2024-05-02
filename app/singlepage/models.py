@@ -34,7 +34,7 @@ class User(AbstractUser):
     is_online = models.BooleanField(default=False)
     
     def __str__(self):
-        return self.usernames
+        return self.username
 
 # Signal to assign a default profile image to a user when it is created
 @receiver(post_save, sender='singlepage.User')
@@ -127,7 +127,7 @@ class Tournament(models.Model):
     username_virtual_player = ArrayField(models.CharField(max_length=100, blank=True), default=list, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     state = models.BooleanField(default=False)
-    winner_uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tournament_winner', null=True)
+    winner_uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tournament_winner', null=True, blank=True)
     number_of_players = models.IntegerField(default=0, blank=True)
     number_of_matchs = models.IntegerField(default=0, blank=True)
     number_of_rounds = models.IntegerField(default=0, blank=True)
