@@ -155,7 +155,6 @@
                     if (response.ok) {
                         return response.json();
                     } else {
-                        console.log(response)
                         throw new Error("Erreur lors de la création du tournoi.");
                     }
                 }).then(data => {
