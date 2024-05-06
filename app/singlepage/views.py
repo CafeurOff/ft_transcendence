@@ -401,6 +401,7 @@ def create_tournament(request):
         tournament.save()
         
         create_tournament_matchs(tournament)
+        print("tedt", create_tournament_matchs)
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False, 'message': 'Une erreur s’est produite'})
@@ -442,15 +443,16 @@ def create_tournament_matchs(tournament):
         j = 1
         while j*2 < tournament.number_of_players:
             j*= 2
-        matchs_in_rounds = tournament.number_of_matchs - j
-
+        matchs_in_rounds = tournament.number_of_players - j
         for k in range(matchs_in_rounds):
             p1 = define_player(tournament.username_virtual_player, player)
             p2 = define_player(tournament.username_virtual_player, player + 1)
-            match = Tournament_Match.objects.create(tournament_id=tournament.id, match_id=matchId, round_id=i + 1, player1=p1, player2=p2, winner="...")
+            match = Tournament_Match.objects.create(tournament_id=tournament, match_id=matchId, round_id=i + 1, player1=p1, player2=p2, winner="...")
             match.save()
             matchId+=1
             player+=2
+    return
+
 
 def define_player(PlayerList, num):
     if num < len(PlayerList):
