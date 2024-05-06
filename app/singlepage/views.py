@@ -401,7 +401,6 @@ def create_tournament(request):
         tournament.save()
         
         create_tournament_matchs(tournament)
-        print("tedt", create_tournament_matchs)
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False, 'message': 'Une erreur s’est produite'})
