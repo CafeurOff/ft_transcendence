@@ -107,6 +107,7 @@ services:
       - 8200:8200
     cap_add:
       - IPC_LOCK
+    container_name: vault
     volumes:
       - ./configuration/vault/config.hcl:/vault/config/config.hcl
       - vault_data:/vault/file
