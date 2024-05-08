@@ -260,6 +260,23 @@ def game(request):
         game.save()
         return JsonResponse({'success': True})
     return render(request, 'game.html')
+
+def tournament_match(request):
+    if request.method == 'POST':
+        data_player = json.loads(request.body)
+        player1 = data_player.get('player1')
+        player2 = data_player.get('player2')
+        match_id = data_player.get('match_id')
+        data = {
+            'player1': player1,
+            'player2': player2,
+            'match_id': match_id
+        }
+        request.session['data'] = data
+        return JsonResponse({'success': True})
+    else:
+        data =  request.session.get('data', None)
+    return render(request, 'tournament_match.html', {'data': data})
     
 # View Game page : localhost:8000/game/ia
 # This view displays the game page of the application
@@ -324,6 +341,20 @@ def update_loss(request):
         if game is not None:
             game.ended = True
             game.save()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+
+@login_required
+def update_tournament_match(request):
+    if request.method == 'POST':
+        data = json.load(request)
+        match_id = data['match_id']
+        winner = data['winner']
+        match = Tournament_Match.objects.get(match_id=match_id)
+        match.winner = winner
+        match.save()
+        
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})

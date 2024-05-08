@@ -33,7 +33,6 @@
                         {% for username in tournaments.username_virtual_player %}
                         <div class="information-container mt-3 text-white">
                             <div class="user-card mx-3 d-flex align-items-center">
-                                <!-- <img src="{% if request.user.profile_image %}{{ request.user.profile_image.url }}{% endif %}" alt="user" class="profile-picture rounded-circle me-3" style="width: 34px; height: 34px;"> -->
                                 <p class="fw-light fs-5 mb-0">- <span class="fw-bold">{{ username }}</span></p>
                             </div>
                         </div>
@@ -47,63 +46,94 @@
                             <p class="text-center fw-bold fs-5 mbt-1 ">Liste des matchs du round</p>
                         </div>
                 
-                        <div class="row mt-2 fs-5 fw-medium">
-                            {% for id in matchs_list %}
-                            <div class="col-4 col-md-3">
-                                <div class="info-box mb-5">
-                                    <div class="mb-2">
-                                        {% if id.player1 == id.winner %}
-                                        <p class="fw-bold fs-5 mbt-1 text-success text-center">{{ id.player1 }}</p>
-                                        <p class="fw-bold fs-5 mbt-1 text-danger text-center">{{ id.player2 }}</p>
-                                        {% elif id.player2 == id.winner %}
-                                        <p class="fw-bold fs-5 mbt-1 text-danger text-center">{{ id.player1 }}</p>
-                                        <p class="fw-bold fs-5 mbt-1 text-success text-center">{{ id.player2 }}</p>
-                                        {% else %}    
-                                        <p class="fw-bold fs-5 mbt-1 text-white text-center">{{ id.player1 }}</p>
-                                        <p class="fw-bold fs-5 mbt-1 text-white text-center">{{ id.player2 }}</p>
-                                        {% endif %}
+                        <div class="row mt-2 fs-5 fw-medium ">
+                        {% for id in matchs_list %}
+                            {% if id.player1 != '_' and id.player2 != '_' %}
+                                <div class="col-4 col-md-3">
+                                    <div class="info-box mb-5">
+                                        <div class="p-2">
+                                            {% if id.player1 == id.winner %}
+                                                <p class="fw-bold fs-5 text-white text-center">Round <span class="fw-bold">{{ id.id }}</span></p>
+                                                <p class="p-2 fs-5 text-success text-center">{{ id.player1 }}</p>
+                                                <p class="fw-bold fs-5 text-white text-center">VS</p>
+                                                <p class="fw-bold fs-5 text-danger text-center">{{ id.player2 }}</p>
+                                            {% elif id.player2 == id.winner %}
+                                                <p class="fw-bold fs-5 text-white text-center">Round <span class="fw-bold">{{ id.id }}</span></p>
+                                                <p class="p-2 fw-bold fs-5 text-danger text-center">{{ id.player1 }}</p>
+                                                <p class="fw-bold fs-5 text-white text-center">VS</p>
+                                                <p class="fw-bold fs-5 text-success text-center">{{ id.player2 }}</p>
+                                            {% else %}
+                                                <p class="fw-bold fs-5 text-white text-center">Round <span class="fw-bold">{{ id.id }}</span></p>
+                                                <p class="p-2 fw-light fs-5 text-white text-center">{{ id.player1 }}</p>
+                                                <p class="fw-bold fs-5 text-white text-center">VS</p>
+                                                <p class="fw-light fs-5 text-white text-center">{{ id.player2 }}</p>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            {% endfor %}
+                            {% endif %}
+                        {% endfor %}                        
                         </div>
                     </div>
-                </div>  
+                </div>
                 {% if tournaments.state is False %}
-                <div class="d-flex justify-content-center mt-2">
-                    <button class="btn btn btn-success btn-custom " id="create-tournament" data-bs-toggle="modal" data-bs-target="#game">Lancer le prochain match</button>
+                <div class="d-flex justify-content-center mt-5">
+                    <input type="hidden" id="currentMatchId" value="1">
+                    <button class="btn btn btn-success btn-custom" onclick="LaunchMatch()">Lancer le prochain round</button>
                 </div>
                 {% endif %}
-                <!-- Modal -->
-                <div class="modal fade" id="game" tabindex="-1" aria-labelledby="tournamentsModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content bg-darker">
-                            <div class="modal-header">
-                                <h5 class="modal-title text-white" id="tournamentsModalLabel">Prochain match</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-
-                            <div class="modal-body">
-                                <p class="text-white text-center"></p>
-                                <div class="d-flex justify-content-center">
-                                    {% with isBreak=0 %}
-                                        {% for id in match_list %}
-                                            {% if id.winner == "..." and isBreak == 0 %}
-                                                <div class="info-box mb-5">
-                                                    <p class="fw-bold fs-5 mbt-1 text-white text-center">{{ id.player1 }}</p>
-                                                    <p class="fw-bold fs-5 mbt-1 text-white text-center">{{ id.player2 }}</p>
-                                                </div>
-                                                {{ isBreak|add:"1" }}
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endwith %}
-                                    <button type="button" class="btn btn-success mt-2" onclick="AddPlayer()">Lancer le match</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         {% endfor %}
     </body>
+
+    <script>
+        function LaunchMatch() {
+            // get the current match_id
+            var currentMatchId = parseInt(document.getElementById('currentMatchId').value);
+
+            // Check if the match_id is ended
+            var matchEnded = false;
+            {% for id in matchs_list %}
+                if ({{ id.id }} == currentMatchId) {
+                    if ('{{ id.winner }}' != '...') {
+                        matchEnded = true;
+                    }
+                }
+            {% endfor %}
+
+            // If the match is ended, increment the currentMatchId
+            if (matchEnded) {
+                currentMatchId += 1;
+                document.getElementById('currentMatchId').value = currentMatchId;
+            }
+
+            // Get players of the current match
+            var player1 = '';
+            var player2 = '';
+            {% for id in matchs_list %}
+                if ({{ id.id }} == currentMatchId) {
+                    player1 = '{{ id.player1 }}';
+                    player2 = '{{ id.player2 }}';
+                }
+            {% endfor %}
+
+            // Send the request to the server
+            fetch('/tournament_match/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    'player1': player1,
+                    'player2': player2,
+                    'match_id': currentMatchId
+                })
+            })
+            .then(response => response.json())
+            .then(response => {
+                window.location.href = '/tournament_match/';
+            });
+        }
+    </script>
 </html>

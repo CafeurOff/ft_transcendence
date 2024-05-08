@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% load static %}
+{% include "./base/navbar.html" %}
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="{% static 'css/game.css' %}">
+        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+        <title>Game - Pong</title>
+    </head>
+
+<body>
+    <div class="mx-5 mt-3">
+        <h4 class="title text-white">PINGPONG</h4>
+    </div>
+
+    <div class="mx-5">
+        <a class="text-white" href="{% url 'tournaments_overview' %}">Retournez</a>
+    </div>
+
+    <div class="mx-5 text-center">
+        <div class="game-container embed-responsive embed-responsive-16by9">
+            <canvas id="pongTournamentCanvas" class="embed-responsive-item" width="800" height="400"></canvas>
+        </div>
+    </div>
+    
+    <div class="text-center">
+        <h4 class="title text-white">SCORE</h4>
+        <div class="score">
+            <span id="player1-score" class="text-white fw-bold">0</span> <span class="text-white">-</span> <span id="player2-score" class="text-white fw-bold">0</span>
+        </div>
+    </div>
+    
+    <script>
+        const player1_name = "{{ data.player1 }}";
+        const player2_name = "{{ data.player2 }}";
+        const tournamentId = "{{ data.match_id }}";
+        const tournamentpage = "{% url 'tournaments_overview' %}";
+        const update_url = "{% url 'update_tournament_match' %}";
+        const csrfToken = "{{ csrf_token }}";
+    </script>
+    <script src="{% static 'js/tournament.js' %}"></script>
+</body>
+
+</html>
