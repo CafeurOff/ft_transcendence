@@ -127,7 +127,7 @@ class Tournament(models.Model):
     username_virtual_player = ArrayField(models.CharField(max_length=100, blank=True), default=list, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     state = models.BooleanField(default=False)
-    winner_uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tournament_winner', null=True, blank=True)
+    winner_name = models.CharField(max_length=100, blank=True)
     number_of_players = models.IntegerField(default=0, blank=True)
     number_of_matchs = models.IntegerField(default=0, blank=True)
     number_of_rounds = models.IntegerField(default=0, blank=True)
