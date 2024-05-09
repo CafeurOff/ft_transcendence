@@ -63,6 +63,7 @@
                                                 <p class="fw-bold fs-5 text-white text-center">VS</p>
                                                 <p class="fw-bold fs-5 text-success text-center">{{ id.player2 }}</p>
                                             {% else %}
+                                                <input type="hidden" id="currentMatchId" value="{{ id.id }}">
                                                 <p class="fw-bold fs-5 text-white text-center">Round <span class="fw-bold">{{ id.id }}</span></p>
                                                 <p class="p-2 fw-light fs-5 text-white text-center">{{ id.player1 }}</p>
                                                 <p class="fw-bold fs-5 text-white text-center">VS</p>
@@ -78,9 +79,11 @@
                 </div>
                 {% if tournaments.state is False %}
                 <div class="d-flex justify-content-center mt-5">
-                    <input type="hidden" id="currentMatchId" value="1">
                     <button class="btn btn btn-success btn-custom" onclick="LaunchMatch()">Lancer le prochain round</button>
                 </div>
+                {% else %}
+                    <p class="text-white text-center mt-5">Le tournois est terminé</p>
+                    <p class="text-white text-center">Le gagnant est <span class="fw-bold">{{ tournaments.winner_name }}</span></p>
                 {% endif %}
             </div>
         {% endfor %}
@@ -91,7 +94,14 @@
             // get the current match_id
             var currentMatchId = parseInt(document.getElementById('currentMatchId').value);
 
-            // Check if the match_id is ended
+            // Get the tournament id
+            {% for tournaments in tournaments %}
+                var tournament_id = '{{ tournaments.id }}';
+            {% endfor %}
+
+            console.log("Match ID: " + currentMatchId);
+
+            // Check in a loop if all 
             var matchEnded = false;
             {% for id in matchs_list %}
                 if ({{ id.id }} == currentMatchId) {
@@ -100,6 +110,10 @@
                     }
                 }
             {% endfor %}
+
+            // Get all matches ended bego
+
+            console.log("Match ID", currentMatchId, "is ended ? " + matchEnded);
 
             // If the match is ended, increment the currentMatchId
             if (matchEnded) {
@@ -117,23 +131,28 @@
                 }
             {% endfor %}
 
+
             // Send the request to the server
-            fetch('/tournament_match/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({
-                    'player1': player1,
-                    'player2': player2,
-                    'match_id': currentMatchId
+            if (matchEnded == false) {
+                fetch('/tournament_match/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        'player1': player1,
+                        'player2': player2,
+                        'match_id': currentMatchId,
+                        'tournament_id': tournament_id
+                    })
                 })
-            })
-            .then(response => response.json())
-            .then(response => {
-                window.location.href = '/tournament_match/';
-            });
+                .then(response => response.json())
+                .then(response => {
+                    window.location.href = '/tournament_match/';
+                });
+            }
+            
         }
     </script>
 </html>

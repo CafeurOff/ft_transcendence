@@ -189,7 +189,7 @@ def tournaments(request):
 @login_required
 def tournaments_overview(request):
     if request.user.is_authenticated:
-        tournaments_overview = Tournament.objects.get(owner_uid_id=request.user.id, state=False)
+        tournaments_overview = Tournament.objects.filter(owner_uid_id=request.user.id).last()
         # if user id have already created a tournament and it is not started yet return a message
         data = []
         data.append({
@@ -202,6 +202,7 @@ def tournaments_overview(request):
             'created_at': tournaments_overview.created_at,
             'state': tournaments_overview.state,
             'username_virtual_player': tournaments_overview.username_virtual_player,
+            'winner_name': tournaments_overview.winner_name,
         })
 
         matchs_data = []
@@ -267,10 +268,12 @@ def tournament_match(request):
         player1 = data_player.get('player1')
         player2 = data_player.get('player2')
         match_id = data_player.get('match_id')
+        tournament_id = data_player.get('tournament_id')
         data = {
             'player1': player1,
             'player2': player2,
-            'match_id': match_id
+            'match_id': match_id,
+            'tournament_id': tournament_id
         }
         request.session['data'] = data
         return JsonResponse({'success': True})
@@ -351,10 +354,30 @@ def update_tournament_match(request):
         data = json.load(request)
         match_id = data['match_id']
         winner = data['winner']
-        match = Tournament_Match.objects.get(match_id=match_id)
+        tournament_id = data['tournament_id']
+        match = Tournament_Match.objects.get(match_id=match_id, tournament_id=tournament_id)
         match.winner = winner
         match.save()
-        
+
+        next_round = match.round_id + 1
+        next_match = Tournament_Match.objects.filter(tournament_id=match.tournament_id, round_id=next_round).first()
+
+        if next_match:
+            if next_match.player1 == "_":
+                next_match.player1 = winner
+            elif next_match.player2 == "_":
+                next_match.player2 = winner
+            next_match.save()
+
+        # Check if the tournament is over
+        tournament = Tournament.objects.get(id=tournament_id)
+        matchs = Tournament_Match.objects.filter(tournament_id=tournament_id)
+        matchs = matchs.filter(winner="...")
+        if not matchs:
+            tournament.winner_name = winner
+            tournament.state = True
+            tournament.save()
+
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})
