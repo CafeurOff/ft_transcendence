@@ -246,7 +246,8 @@ function endGame() {
             },
             body: JSON.stringify({
                 'winner': player1_name,
-                'match_id': tournamentId
+                'match_id': tournamentId,
+                'tournament_id': tournament_id
             })
         }).then(response => {
             if (response.ok) {
@@ -271,7 +272,8 @@ function endGame() {
             },
             body: JSON.stringify({
                 'winner': player2_name,
-                'match_id': tournamentId
+                'match_id': tournamentId,
+                'tournament_id': tournament_id
             })
         }).then(response => {
             if (response.ok) {
