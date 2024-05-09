@@ -360,14 +360,18 @@ def update_tournament_match(request):
         match.save()
 
         next_round = match.round_id + 1
-        next_match = Tournament_Match.objects.filter(tournament_id=match.tournament_id, round_id=next_round).first()
+        next_matchs = Tournament_Match.objects.filter(tournament_id=match.tournament_id, round_id=next_round)
 
-        if next_match:
-            if next_match.player1 == "_":
-                next_match.player1 = winner
-            elif next_match.player2 == "_":
-                next_match.player2 = winner
-            next_match.save()
+        for next_match in next_matchs:
+            if next_matchs:
+                if next_match.player1 == "_":
+                    next_match.player1 = winner
+                    next_match.save()
+                    break
+                elif next_match.player2 == "_":
+                    next_match.player2 = winner
+                    next_match.save()
+                    break
 
         # Check if the tournament is over
         tournament = Tournament.objects.get(id=tournament_id)
@@ -475,11 +479,11 @@ def logout_view(request):
 def calculate_rounds(num_players):
     if num_players == 2:
         return (1)
-    elif num_players < 4:
+    elif num_players <= 4:
         return (2)
-    elif num_players < 8:
+    elif num_players <= 8:
         return (3)
-    elif num_players < 16:
+    elif num_players <= 16:
         return (4)
     else:
         return (0)
@@ -504,6 +508,7 @@ def create_tournament_matchs(tournament):
             match.save()
             matchId+=1
             player+=2
+        tournament.number_of_players -= matchs_in_rounds
     return
 
 

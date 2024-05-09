@@ -53,18 +53,18 @@
                                     <div class="info-box mb-5">
                                         <div class="p-2">
                                             {% if id.player1 == id.winner %}
-                                                <p class="fw-bold fs-5 text-white text-center">Round <span class="fw-bold">{{ id.id }}</span></p>
+                                                <p class="fw-bold fs-5 text-white text-center">Match <span class="fw-bold">{{ id.id }}</span></p>
                                                 <p class="p-2 fs-5 text-success text-center">{{ id.player1 }}</p>
                                                 <p class="fw-bold fs-5 text-white text-center">VS</p>
                                                 <p class="fw-bold fs-5 text-danger text-center">{{ id.player2 }}</p>
                                             {% elif id.player2 == id.winner %}
-                                                <p class="fw-bold fs-5 text-white text-center">Round <span class="fw-bold">{{ id.id }}</span></p>
+                                                <p class="fw-bold fs-5 text-white text-center">Match <span class="fw-bold">{{ id.id }}</span></p>
                                                 <p class="p-2 fw-bold fs-5 text-danger text-center">{{ id.player1 }}</p>
                                                 <p class="fw-bold fs-5 text-white text-center">VS</p>
                                                 <p class="fw-bold fs-5 text-success text-center">{{ id.player2 }}</p>
                                             {% else %}
                                                 <input type="hidden" id="currentMatchId" value="{{ id.id }}">
-                                                <p class="fw-bold fs-5 text-white text-center">Round <span class="fw-bold">{{ id.id }}</span></p>
+                                                <p class="fw-bold fs-5 text-white text-center">Match <span class="fw-bold">{{ id.id }}</span></p>
                                                 <p class="p-2 fw-light fs-5 text-white text-center">{{ id.player1 }}</p>
                                                 <p class="fw-bold fs-5 text-white text-center">VS</p>
                                                 <p class="fw-light fs-5 text-white text-center">{{ id.player2 }}</p>
