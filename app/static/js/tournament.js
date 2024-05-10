@@ -262,7 +262,7 @@ function endGame() {
             console.error('Error updating score:', error);
         });
 
-        drawText(player1_name + " wins !", 350, 250, 'red');
+        drawText(player1_name + " wins !", 350, 250, 'white');
     } else {
         fetch(update_url, {
             method: 'POST',
@@ -288,7 +288,7 @@ function endGame() {
             console.error('Error updating score:', error);
         });
 
-        drawText(player2_name, 350, 250, 'red');
+        drawText(player2_name + " wins !", 350, 250, 'white');
     }
 }
 // Boucle sur le jeu 

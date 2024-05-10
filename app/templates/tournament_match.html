@@ -20,6 +20,10 @@
         <a class="text-white" href="{% url 'tournaments_overview' %}">Retournez</a>
     </div>
 
+    <div class="d-flex justify-content-center">
+            <p class="text-success fs-5 fw-bold">{{data.player1}} <span class="text-white fw-light">Contre</span> {{data.player2}}</p>
+    </div>
+
     <div class="mx-5 text-center">
         <div class="game-container embed-responsive embed-responsive-16by9">
             <canvas id="pongTournamentCanvas" class="embed-responsive-item" width="800" height="400"></canvas>

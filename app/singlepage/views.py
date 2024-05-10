@@ -361,7 +361,6 @@ def update_tournament_match(request):
 
         next_round = match.round_id + 1
         next_matchs = Tournament_Match.objects.filter(tournament_id=match.tournament_id, round_id=next_round)
-
         for next_match in next_matchs:
             if next_matchs:
                 if next_match.player1 == "_":

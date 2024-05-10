@@ -32,8 +32,8 @@
                         </div>
                         {% for username in tournaments.username_virtual_player %}
                         <div class="information-container mt-3 text-white">
-                            <div class="user-card mx-3 d-flex align-items-center">
-                                <p class="fw-light fs-5 mb-0">- <span class="fw-bold">{{ username }}</span></p>
+                            <div class="user-card mx-2 d-flex align-items-center">
+                                <p class="fw-light mb-0">- <span class="fw-bold">{{ username }}</span></p>
                             </div>
                         </div>
                         {% endfor %}
@@ -43,30 +43,30 @@
                 <div class="col-md-10" id="rounds">
                     <div class="rounds-container mt-2 p-2">
                         <div class="information-container mt-3 text-white">
-                            <p class="text-center fw-bold fs-5 mbt-1 ">Liste des matchs du round</p>
+                            <p class="text-center fw-bold fs-4">Liste des matchs du tournois</p>
                         </div>
                 
-                        <div class="row mt-2 fs-5 fw-medium ">
-                        {% for id in matchs_list %}
+                        <div class="row mt-1 p-5">
+                        {% for id in matchs_list|dictsort:"id" %}
                             {% if id.player1 != '_' and id.player2 != '_' %}
                                 <div class="col-4 col-md-3">
                                     <div class="info-box mb-5">
                                         <div class="p-2">
                                             {% if id.player1 == id.winner %}
                                                 <p class="fw-bold fs-5 text-white text-center">Match <span class="fw-bold">{{ id.id }}</span></p>
-                                                <p class="p-2 fs-5 text-success text-center">{{ id.player1 }}</p>
-                                                <p class="fw-bold fs-5 text-white text-center">VS</p>
-                                                <p class="fw-bold fs-5 text-danger text-center">{{ id.player2 }}</p>
+                                                <p class="fs-5 text-success text-center">{{ id.player1 }}</p>
+                                                <p class="fw-light fs-5 text-white text-center">VS</p>
+                                                <p class="fw-light fs-5 text-danger text-center">{{ id.player2 }}</p>
                                             {% elif id.player2 == id.winner %}
                                                 <p class="fw-bold fs-5 text-white text-center">Match <span class="fw-bold">{{ id.id }}</span></p>
-                                                <p class="p-2 fw-bold fs-5 text-danger text-center">{{ id.player1 }}</p>
-                                                <p class="fw-bold fs-5 text-white text-center">VS</p>
-                                                <p class="fw-bold fs-5 text-success text-center">{{ id.player2 }}</p>
+                                                <p class="fw-light fs-5 text-danger text-center">{{ id.player1 }}</p>
+                                                <p class="fw-light fs-5 text-white text-center">VS</p>
+                                                <p class="fw-light fs-5 text-success text-center">{{ id.player2 }}</p>
                                             {% else %}
                                                 <input type="hidden" id="currentMatchId" value="{{ id.id }}">
                                                 <p class="fw-bold fs-5 text-white text-center">Match <span class="fw-bold">{{ id.id }}</span></p>
-                                                <p class="p-2 fw-light fs-5 text-white text-center">{{ id.player1 }}</p>
-                                                <p class="fw-bold fs-5 text-white text-center">VS</p>
+                                                <p class="fw-light fs-5 text-white text-center">{{ id.player1 }}</p>
+                                                <p class="fw-light fs-5 text-white text-center">VS</p>
                                                 <p class="fw-light fs-5 text-white text-center">{{ id.player2 }}</p>
                                             {% endif %}
                                         </div>
@@ -78,7 +78,7 @@
                     </div>
                 </div>
                 {% if tournaments.state is False %}
-                <div class="d-flex justify-content-center mt-5">
+                <div class="d-flex justify-content-center mt-3">
                     <button class="btn btn btn-success btn-custom" onclick="LaunchMatch()">Lancer le prochain round</button>
                 </div>
                 {% else %}
