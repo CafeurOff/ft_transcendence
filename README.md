@@ -68,5 +68,4 @@ for Log Management.
 - [Screenshot 2](link/to/screenshot2.png)
 
 ### Diagrams
-- [Architecture Diagram](link/to/architecture_diagram.png)
-- [Database Schema](link/to/database_schema.png)
+- [Database Schema](https://image.noelshack.com/fichiers/2024/20/3/1715730481-db.png)
