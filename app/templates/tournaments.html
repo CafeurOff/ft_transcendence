@@ -113,7 +113,7 @@
                 var playersList = [];
                 var errorMessage = document.getElementById("maxInputMessage");
                 var allFieldsFilled = true;
-                var allFieldsUnique = true;
+                var allFieldUnique = true;
 
                 players.forEach(player => {
                     if (player.value === "") {
@@ -121,7 +121,7 @@
                     }
                     playersList.forEach(name =>{
                         if (name === player.value) {
-                            allFieldsUnique = false;
+                            allFieldUnique = false;
                         }
                     })
                     playersList.push(player.value);
@@ -137,16 +137,16 @@
                     return;
                 }
 
-                if (!allFieldsUnique) {
+                if (!allFieldUnique) {
                     errorMessage.textContent = "Veuillez remplir tous les champs, de pseudo unique.";
                     return;
                 }
 
-                fetch("{% url 'create_tournament' %}", {
+                fetch({% url 'create_tournament' %}, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-CSRFToken": "{{ csrf_token }}"
+                        "X-CSRFToken": '{{ csrf_token }}'
                     },
                     body: JSON.stringify({
                         players: playersList

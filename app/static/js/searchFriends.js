@@ -20,7 +20,6 @@ searchInput.addEventListener('keydown', (event) => {
         })
         .then(response => response.json())
         .then(response => {
-            console.log(response);
             usersContainer.innerHTML = '';
             if (response.users.length === 0 || searchInput.value === '' ) {
                 usersContainer.innerHTML = `

@@ -29,10 +29,11 @@ urlpatterns = [
     path('admin/', admin.site.urls), # Admin page localhost:8000/admin
     path('', views.index, name='index'), # Index page localhost:8000
     path('game/', views.game, name='game'), # Game page localhost:8000/game
-    path('game/ia', views.gameia, name='gameia'), # Game page localhost:8000/game/ia
+    path('ia/', views.gameia, name='gameia'), # Game page localhost:8000/game/ia
     path('register/', views.register, name='register'), # Register page localhost:8000/register
     path('welcome/', views.welcome, name='welcome'), # Welcome page localhost:8000/welcome
     path('profile/', views.profile, name='profile'), # Profile page localhost:8000/profile
+    path('match_infos/<int:match_id>/', views.match_infos, name='match_infos'), # Match infos page localhost:8000/match_infos
     path('friends/', views.friends, name='friends'), # Friends page localhost:8000/friends
     path('gamepage/', views.gamepage, name='gamepage'), # Game page localhost:8000/gamepage
     path('settings/', views.settings, name='settings'), # Settings page localhost:8000/settings
@@ -50,7 +51,3 @@ urlpatterns = [
     path('update_tournament_match/', views.update_tournament_match, name='update_tournament_match'), # Update tournament match endpoint
     path('', include('django_prometheus.urls')) # Is the localhost:8000/metrics endpoint
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

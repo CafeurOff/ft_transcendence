@@ -61,7 +61,7 @@ def register(request):
         if form.is_valid(): 
             user = form.save()
             login(request, user)
-            return render(request, 'welcome.html')
+            return redirect('/welcome/')
         else:
             message = 'Votre formulaire contient des erreurs'
             return render(request, 'register.html', {'form': form, 'message': message})
@@ -79,12 +79,15 @@ def welcome(request):
     for friend in my_friends:
         friend_user = get_user_model().objects.get(id=friend.user2_uid.id)
         friend_is_online = friend_user.is_online
+        friend_is_ongame = friend_user.in_game
         online_status = 'En ligne' if friend_is_online else 'Hors ligne'
+        game_status = 'En jeu' if friend_is_ongame else 'Hors jeu'
         friends.append({
             'username': friend_user.username,
             'profile_image': request.build_absolute_uri(friend_user.profile_image.url),
             'id': friend_user.id,
-            'is_online': online_status
+            'is_online': online_status,
+            'is_ongame': game_status,
         })
     if request.user.is_authenticated:
         return render(request, 'welcome.html', {'user': request.user, 'friends': friends})
@@ -103,6 +106,7 @@ def settings(request):
     picture_form = UpdatePictureForm(instance=request.user)
     form = UpdateUserNameForm(instance=request.user)
     password_form = UpdatePasswordForm(instance=request.user)
+    message = ''
     if request.method == 'POST':
         picture_form = UpdatePictureForm(request.POST, request.FILES, instance=request.user)
         form = UpdateUserNameForm(request.POST, instance=request.user)
@@ -118,11 +122,13 @@ def settings(request):
                 user.save()
                 update_session_auth_hash(request, user)
             else:
+                message = 'Veuillez entrer un mot de passe valide'
                 password_form = UpdatePasswordForm(instance=request.user)
         else:
+            message = 'Votre formulaire contient des erreurs'
             picture_form = UpdatePictureForm(instance=request.user)
             form = UpdateUserNameForm(instance=request.user)
-    return render(request, 'settings.html', {'form': form, 'picture_form': picture_form, 'password_form': password_form,})
+    return render(request, 'settings.html', {'form': form, 'picture_form': picture_form, 'password_form': password_form, 'message': message})
 
 # View Profile page : localhost:8000/profile/
 # This view displays the profile page of the application
@@ -139,18 +145,31 @@ def profile(request):
     win_matches = matches.filter(winner_uid=request.user.id)
     lose_matches = matches.exclude(winner_uid=request.user.id)
 
-    matches_with_date = [(match, timezone.localtime(match.created_at)) for match in matches]
-
-    # Tri de la liste par date de création
-    matches_with_date.sort(key=lambda x: x[1])
-
     data = {
-        'matches_with_date': matches_with_date,  # Liste de tuples (match, created_at)
         'win_matches': win_matches.count(),
-        'lose_matches': lose_matches.count(),
+        'lose_matches': lose_matches.count()
     }
-    return render(request, 'profile.html', {'total_matches': total_matches, 'win': win, 'lose': lose, 'data': data})
+    return render(request, 'profile.html', {'total_matches': total_matches, 'win': win, 'lose': lose, 'data': data, 'matches': matches})
 
+# View Match Infos page : localhost:8000/match_infos/
+# This view displays the match infos page of the application
+# It displays the match infos page with the user's profile picture, username, and a game
+
+@login_required
+def match_infos(request, match_id):
+    match = Game.objects.get(id=match_id)
+    match.score = Game.objects.get(id=match_id).score_player1
+    match.score_player2 = Game.objects.get(id=match_id).score_player2
+    match.winner = Game.objects.get(id=match_id).winner_uid
+    if match.winner == request.user:
+        match.winner = 'Vous'
+    else:
+        match.winner = 'Adversaire'
+    match.time = Game.objects.get(id=match_id).time
+    # Convert the time miliseconds to seconds
+    match.time = match.time / 1000
+    match.time = time.strftime('%M:%S', time.gmtime(match.time))
+    return render(request, 'match_infos.html', {'match': match})
 
 # Tournament page : localhost:8000/tournament/
 # This view displays the tournament page of the application
@@ -240,12 +259,7 @@ def friends(request):
 
 @login_required
 def gamepage(request):
-    if request.user.is_authenticated:
-        return render(request, 'gamepage.html', {'user': request.user})
-    else:
-        message = 'Vous devez être connecté pour accéder à cette page'
-        return render(request, 'index.html', {'message': message, 'form': UsernamesForm(), 'password_form': PasswordForm()})
- 
+    return render(request, 'gamepage.html', {'user': request.user})
 # View Game page : localhost:8000/game/
 # This view displays the game page of the application
 # It displays the game page with the user's profile picture, username, and a game
@@ -255,6 +269,7 @@ def gamepage(request):
 def game(request):
     if request.method == 'POST':
         request.user.total_matches += 1
+        request.user.in_game = True
         request.user.save()
 
         game = Game.objects.create(local=True, tournament=False, ended=False, player_uid_id=request.user.id)
@@ -262,6 +277,7 @@ def game(request):
         return JsonResponse({'success': True})
     return render(request, 'game.html')
 
+@login_required
 def tournament_match(request):
     if request.method == 'POST':
         data_player = json.loads(request.body)
@@ -278,9 +294,16 @@ def tournament_match(request):
         request.session['data'] = data
         return JsonResponse({'success': True})
     else:
-        data =  request.session.get('data', None)
-    return render(request, 'tournament_match.html', {'data': data})
-    
+        tournaments_overview = Tournament.objects.filter(owner_uid_id=request.user.id).last()
+        match = Tournament_Match.objects.filter(tournament_id=tournaments_overview.id, winner='...').first()
+        data =  {
+            'player1': match.player1,
+            'player2': match.player2,
+            'match_id': match.match_id,
+            'tournament_id': match.tournament_id
+        }
+    return render(request, 'tournament_match.html', {'tournament_match': data})
+
 # View Game page : localhost:8000/game/ia
 # This view displays the game page of the application
 # It displays the game page with the user's profile picture, username, and a game
@@ -290,6 +313,7 @@ def tournament_match(request):
 def gameia(request):
     if request.method == 'POST':
         request.user.total_matches += 1
+        request.user.in_game = True
         request.user.save()
         level = json.load(request)['level']
         request.session['level'] = level 
@@ -317,13 +341,22 @@ def update_score(request):
     if request.method == 'POST':
         user = request.user
         user.win += 1
+        user.in_game = False
         user.save()
 
-        winner_uid = json.load(request)['winner_uid']
+        data = json.load(request)
+
+        winner_uid = data['winner_uid']
+        score_player1 = 5
+        score_player2 = data['score']
+        time = data['time']
         game = Game.objects.last()
         if game is not None:
             game.ended = True
             game.winner_uid_id = winner_uid
+            game.score_player1 = score_player1
+            game.score_player2 = score_player2
+            game.time = time
             game.save()
         return JsonResponse({'success': True})
     else:
@@ -338,11 +371,19 @@ def update_loss(request):
     if request.method == 'POST':
         user = request.user
         user.lose += 1
+        user.in_game = False
         user.save()
 
         game = Game.objects.last()
+        data = json.load(request)
+        score_player1 = data['score']
+        time = data['time']
+        score_player2 = 5
         if game is not None:
             game.ended = True
+            game.score_player1 = score_player1
+            game.score_player2 = score_player2
+            game.time = time
             game.save()
         return JsonResponse({'success': True})
     else:
@@ -354,7 +395,8 @@ def update_tournament_match(request):
         data = json.load(request)
         match_id = data['match_id']
         winner = data['winner']
-        tournament_id = data['tournament_id']
+        Tournament_up = Tournament.objects.filter(owner_uid_id=request.user.id).last()
+        tournament_id = Tournament_up.id
         match = Tournament_Match.objects.get(match_id=match_id, tournament_id=tournament_id)
         match.winner = winner
         match.save()
@@ -383,8 +425,16 @@ def update_tournament_match(request):
 
         return JsonResponse({'success': True})
     else:
-        return JsonResponse({'success': False})
-
+        tournaments_overview = Tournament.objects.filter(owner_uid_id=request.user.id).last()
+        match = Tournament_Match.objects.filter(tournament_id=tournaments_overview.id, winner='...').first()
+        if not match:
+            return JsonResponse({'success': False})
+        data =  {
+            'player1': match.player1,
+            'player2': match.player2,
+            'match_id': match.match_id,
+        }
+    return JsonResponse({'tournament_match': data})
 # Handler for 404 errors
 # This handler is called when a page is not found
 # It renders the 404.html template

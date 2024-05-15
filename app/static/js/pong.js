@@ -11,6 +11,7 @@ const initialBallSpeed = 3; // Update speed when in pc screen
 const maxBallSpeed = 10;
 const keyState = {};
 
+var TimeStart = null;
 
 let player1Score = 0;
 let player2Score = 0;
@@ -145,57 +146,52 @@ function chooseRandomDirection(ballX, ballY) {
 
 function update() {
     // Faire bouger la balle
-        ballX += ballSpeedX;
-        ballY += ballSpeedY;
+    // Prévoir le prochain mouvement de la balle
+    let nextX = ballX + ballSpeedX;
+    let nextY = ballY + ballSpeedY;
 
-    // Envoyer la balle dans l'autre sens si elle touche le haut ou le bas
-    if ((ballY + ballRadius >= canvas.height || ballY - ballRadius <= 0)) {
-        ballSpeedY = -ballSpeedY * getRandomNumber(0.8, 1.2);
-        ballY += ballSpeedY;
-    }
-
-    // Envoyer la balle de l'autre côté si elle touche un joueur
-    else if (ballX - ballRadius < paddleWidth &&
-        ballY + ballRadius > player1Y &&
-        ballY - ballRadius < player1Y + paddleHeight && ballSpeedX) {
-        ballSpeedX = -ballSpeedX * getRandomNumber(0.8, 1.2); //0,8, 1,2
-        ballX += ballSpeedX;
-    }
-
-    else if (ballX + ballRadius > canvas.width - paddleWidth &&
-        ballY + ballRadius > player2Y &&
-        ballY - ballRadius < player2Y + paddleHeight && ballSpeedX) {
+    // Vérifier la collision avec le palet du joueur
+    if (nextX - ballRadius < paddleWidth &&
+        nextY + ballRadius > player1Y &&
+        nextY - ballRadius < player1Y + paddleHeight &&
+        nextX - ballRadius >= 0) { // Assurer que la balle ne pénètre pas dans le palet
         ballSpeedX = -ballSpeedX * getRandomNumber(0.8, 1.2);
-        ballX += ballSpeedX;
+        ballSpeedY = ballSpeedY * getRandomNumber(0.8, 1.2);
     }
 
-    // Si la balle est sortie du jeu, remettre la balle au centre
-    if (ballX - ballRadius < 0) {
-        player2Score++;
-        resetBall();
-        resetPaddles();
-    } else if (ballX + ballRadius > canvas.width) {
-        player1Score++;
-        resetBall();
-        resetPaddles();
+    // Vérifier la collision avec le palet de l'IA
+    if (nextX + ballRadius > canvas.width - paddleWidth &&
+        nextY + ballRadius > player2Y &&
+        nextY - ballRadius < player2Y + paddleHeight &&
+        nextX + ballRadius <= canvas.width) { // Assurer que la balle ne pénètre pas dans le palet
+        ballSpeedX = -ballSpeedX * getRandomNumber(0.8, 1.2);
+        ballSpeedY = ballSpeedY * getRandomNumber(0.8, 1.2);
     }
 
-    // Augmenter la vitesse de la balle progressivement sur une même manche
-    if (Math.abs(ballSpeedX) < maxBallSpeed) {
-        ballSpeedX += ballSpeedX > 0 ? 0.001 : -0.001;
-    }
-    else
-    {
-        ballSpeedX = maxBallSpeed;
+    // Vérifier la collision avec les bords du canvas
+    if (nextY + ballRadius >= canvas.height || nextY - ballRadius <= 0) {
+        ballSpeedY = -ballSpeedY * getRandomNumber(0.8, 1.2);
     }
 
-    if (Math.abs(ballSpeedY) < maxBallSpeed) {
-        ballSpeedY += ballSpeedY > 0 ? 0.001 : -0.001;
+    if ((nextX + ballRadius >= canvas.width && ballSpeedX > 0) || (nextX - ballRadius <= 0 && ballSpeedX < 0)) {
+        // Vérifier si la balle a franchi la ligne de but
+        if (nextX + ballRadius >= canvas.width) {
+            player1Score++;
+            resetBall();
+            resetPaddles();
+            return;
+        } else if (nextX - ballRadius <= 0) {
+            player2Score++;
+            resetBall();
+            resetPaddles();
+            return;
+        }
+        ballSpeedX = -ballSpeedX * getRandomNumber(0.8, 1.2);
     }
-    else
-    {
-        ballSpeedY = maxBallSpeed;
-    }
+
+    // Déplacer la balle
+    ballX += ballSpeedX;
+    ballY += ballSpeedY;
 }
 
 //Replacer la balle au centre
@@ -237,6 +233,12 @@ function handleKeyPress() {
 // Boucle sur le jeu 
 
 function gameLoop() {
+    if (location.pathname != '/game/') {
+        return ;
+    }
+    if (TimeStart == null) {
+        TimeStart = Date.now();
+    }
     update();
     draw();
     handleKeyPress()
@@ -244,6 +246,60 @@ function gameLoop() {
             requestAnimationFrame(gameLoop);
     } else {
         endGame();
+    }
+}
+
+function endGame() {
+    var TimeEnd = Date.now() - TimeStart;
+    console.log(TimeEnd);
+    if (player1Score === 5) {
+        fetch(updateScoreUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'winner_uid': userId,
+                'score': player2Score,
+                'time': TimeEnd
+            })
+        }).then(response => {
+            if (response.ok) {
+                console.log('Score updated successfully!');
+                window.location.href = "/gamepage/";
+            } else {
+                console.error('Failed to update score!');
+            }
+        }).catch(error => {
+            console.error('Error updating score:', error);
+        });
+
+        drawText(username + " wins !", 350, 250, 'red');
+    } else {
+        fetch(updateLoseUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'winner_uid': '0',
+                'score': player1Score,
+                'time': TimeEnd
+            })
+        }).then(response => {
+            if (response.ok) {
+                console.log('Score updated successfully!');
+                window.location.href = "/gamepage/";
+            } else {
+                console.error('Failed to update score!');
+            }
+        }).catch(error => {
+            console.error('Error updating score:', error);
+        });
+
+        drawText("Player 2 wins !", 350, 250, 'red');
     }
 }
 

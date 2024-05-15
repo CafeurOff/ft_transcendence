@@ -29,12 +29,13 @@ class User(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
     total_matches = models.IntegerField(default=0, blank=True)
+    in_game = models.BooleanField(default=False)
     win = models.IntegerField(default=0, blank=True)
     lose = models.IntegerField(default=0, blank=True)   
     is_online = models.BooleanField(default=False)
     
     def __str__(self):
-        return self.username
+        return self.usernames
 
 # Signal to assign a default profile image to a user when it is created
 @receiver(post_save, sender='singlepage.User')
@@ -86,6 +87,9 @@ class Game(models.Model):
     player_uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player', null=True)
     local = models.BooleanField(default=False)
     tournament = models.BooleanField(default=False)
+    score_player1 = models.IntegerField(default=0)
+    score_player2 = models.IntegerField(default=0)
+    time = models.IntegerField(default=0)
     ended = models.BooleanField(default=False)
     winner_uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='winner', null=True)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -21,7 +21,11 @@
     </div>
 
     <div class="d-flex justify-content-center">
-            <p class="text-success fs-5 fw-bold">{{data.player1}} <span class="text-white fw-light">Contre</span> {{data.player2}}</p>
+        <p class="text-white fs-5 fw-light">Match : <span class="fw-bold">{{tournament_match.match_id}}</span></p>
+    </div>
+    
+    <div class="d-flex justify-content-center">
+        <p class="text-success fs-5 fw-bold">{{tournament_match.player1}} <span class="text-white fw-light">Contre</span> {{tournament_match.player2}}</p>
     </div>
 
     <div class="mx-5 text-center">
@@ -38,12 +42,12 @@
     </div>
     
     <script>
-        const player1_name = "{{ data.player1 }}";
-        const player2_name = "{{ data.player2 }}";
-        const tournamentId = "{{ data.match_id }}";
-        const tournament_id = "{{ data.tournament_id }}";
+        const player1_name = "{{ tournament_match.player1 }}";
+        const player2_name = "{{ tournament_match.player2 }}";
+        const tournamentId = "{{ tournament_match.match_id }}";
+        const tournament_id = "{{ tournament_match.tournament_id }}";
         const tournamentpage = "{% url 'tournaments_overview' %}";
-        const update_url = "{% url 'update_tournament_match' %}";
+        const update_tournament_match = "{% url 'update_tournament_match' %}";
         const csrfToken = "{{ csrf_token }}";
     </script>
     <script src="{% static 'js/tournament.js' %}"></script>

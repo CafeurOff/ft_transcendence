@@ -8,8 +8,8 @@ admin.site.register(Friend)
 admin.site.register(Tournament)
 admin.site.register(Tournament_Match)
 
+
 # Change the title of the admin page
 admin.site.site_header = 'Transcendence Administration'
 admin.site.site_title = 'Transcendence Administration'
 
-# Manage tournaments of a specific user
